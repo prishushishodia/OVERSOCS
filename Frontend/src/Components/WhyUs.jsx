@@ -53,7 +53,7 @@ function VelocityScroller({ text, direction = 1, velocity = 80, textSize = "text
     <div className="overflow-hidden w-full h-[100px] relative">
       <motion.div
         style={{ x }}
-        className={`flex whitespace-nowrap ${textSize} font-extrabold uppercase tracking-[0.2em] text-white opacity-20 select-none`}
+        className={`flex whitespace-nowrap ${textSize} font-extrabold uppercase tracking-[0.2em] text-black opacity-20 select-none`}
       >
         <span ref={ref} className="mx-8">{text}</span>
         <span className="mx-8">{text}</span>
@@ -75,31 +75,31 @@ function ShinyModel({ scale = 5 }) {
   scene.traverse((child) => {
     if (child.isMesh) {
       child.material = new THREE.MeshStandardMaterial({
-        color: "#230507",
-        roughness: 0.001,
+        color: "#000000",
+        roughness: 0.01,
         metalness: 5,
       });
     }
   });
 
-  return <primitive object={scene} ref={modelRef} scale={scale} />;
+  return <primitive object={scene} ref={modelRef} scale={1.34} />;
 }
 
 export default function AboutUs() {
   return (
-    <section id="about" className="relative py-80 px-4 text-white z-10 bg-[#051023] overflow-hidden">
+    <section id="about" className="relative py-80 px-4 text-black z-10 bg-[#F5F5DC] overflow-hidden">
 
       <div className="absolute top-30 -left-20 w-[500px] h-[400px] bg-red-500 opacity-30 blur-3xl rounded-full z-0" />
-      <div className="absolute bottom-30 -right-20 w-[500px] h-[500px] bg-black opacity-80 blur-3xl rounded-full z-0" />
-      <div className="absolute bottom-20 -left-0 w-[600px] h-[600px] bg-blue-900 opacity-30 blur-3xl rounded-full z-0" />
+      <div className="absolute bottom-30 -right-20 w-[500px] h-[500px] bg-white opacity-80 blur-3xl rounded-full z-0" />
+      <div className="absolute bottom-20 -left-0 w-[600px] h-[600px] bg-[#B6B09F] opacity-70 blur-3xl rounded-full z-0" />
 
-      <div className="absolute top-12 left-0 w-full z-0 space-y-4">
-        <VelocityScroller text="OVERSOCS" direction={1} velocity={80} textSize="text-[50px] md:text-[80px]" />
+      <div className="absolute top-12 left-0 w-full text-black z-0 space-y-4">
         <VelocityScroller text="OVERSOCS" direction={-1} velocity={80} textSize="text-[50px] md:text-[80px]" />
+
 
       </div>
 
-      <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none opacity-50">
+      <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none opacity-70">
         <Canvas camera={{ position: [0, 0, 2.5] }}>
           <ambientLight intensity={0.1} />
           <directionalLight position={[3, 2, 2]} />
@@ -109,11 +109,11 @@ export default function AboutUs() {
       </div>
 
       <div className="space-y-20 relative z-10 max-w-5xl mx-auto text-center">
-        <ScrollFloat containerClassName="text-5xl md:text-6xl font-bebas font-extrabold uppercase tracking-widest">
+        <ScrollFloat containerClassName="text-5xl text-black md:text-6xl font-anton font-extrabold uppercase tracking-widest">
           About OVERSOCS
         </ScrollFloat>
 
-        <ScrollFloat textClassName="text-gray-300 leading-relaxed text-lg md:text-xl max-w-3xl mx-auto">
+        <ScrollFloat textClassName="text-black leading-relaxed text-lg md:text-xl max-w-3xl mx-auto">
           Oversocks was born from a simple belief — your socks should work as hard as you do, while making a bold statement We merge premium craftsmanship with fearless design, built for those who refuse to blend in.
         </ScrollFloat>
 
@@ -132,10 +132,10 @@ export default function AboutUs() {
             desc: "Oversocks ships worldwide with lightning-fast dispatch — your next bold look is only days away."
           }].map(({ title, desc }) => (
             <div key={title} className="space-y-6 group">
-              <ScrollFloat containerClassName="text-4xl md:text-5xl font-extrabold uppercase tracking-widest text-white group-hover:text-red-500 transition-all">
+              <ScrollFloat containerClassName="text-4xl md:text-5xl font-extrabold uppercase tracking-widest text-black group-hover:text-red-500 transition-all">
                 {title}
               </ScrollFloat>
-              <ScrollFloat textClassName="text-gray-400 leading-relaxed text-lg md:text-xl ">
+              <ScrollFloat textClassName="text-black leading-relaxed text-lg md:text-xl ">
                 {desc}
               </ScrollFloat>
             </div>
