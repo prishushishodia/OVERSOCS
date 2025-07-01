@@ -57,24 +57,26 @@ export default function HelpPage() {
         className="w-full max-w-2xl z-10 space-y-4"
       >
         {faqs.map((faq, index) => (
-          <div
-            key={index}
-            className="bg-[#f5f5dc] border border-black rounded-2xl shadow hover:shadow-red-500/50 transition-transform"
-          >
-            <button
-              onClick={() => setOpenIndex(openIndex === index ? null : index)}
-              className="flex justify-between items-center w-full px-4 py-3 text-left font-bold uppercase text-lg hover:bg-black hover:text-[#f5f5dc] transition"
-            >
-              {faq.question}
-              {openIndex === index ? <ChevronUp /> : <ChevronDown />}
-            </button>
+         <div
+  key={index}
+  className="bg-[#f5f5dc] border border-black rounded-2xl shadow hover:shadow-red-500/50 transition-transform overflow-hidden"
+>
+  <button
+    onClick={() => setOpenIndex(openIndex === index ? null : index)}
+    className="flex justify-between items-center w-full px-4 py-3 text-left font-bold uppercase text-lg transition 
+      hover:bg-black hover:text-[#f5f5dc]"
+  >
+    {faq.question}
+    {openIndex === index ? <ChevronUp /> : <ChevronDown />}
+  </button>
 
-            {openIndex === index && (
-              <div className="px-4 py-2 text-black/80 border-t border-black">
-                {faq.answer}
-              </div>
-            )}
-          </div>
+  {openIndex === index && (
+    <div className="px-4 py-2 text-black/80 border-t border-black">
+      {faq.answer}
+    </div>
+  )}
+</div>
+
         ))}
       </motion.div>
     </div>
