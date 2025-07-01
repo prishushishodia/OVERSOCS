@@ -4,9 +4,9 @@ export default function Footer() {
   return (
     <footer className="bg-[#000000] pt-20 pb-52 text-white font-heading uppercase relative overflow-hidden">
 
-      {/* Big Translucent OVERSOCS Text */}
-      <h1 className="absolute left-0 right-0 bottom-0 translate-x-[-5%] translate-y-[20%] text-[14vw] md:text-[20vw] font-extrabold text-white/10 leading-none select-none whitespace-nowrap pointer-events-none text-center">
-        OVERSOCS
+      {/* Big Translucent OVERSOCKS Text */}
+      <h1 className="absolute left-0 right-0 bottom-0 translate-x-[-6%] translate-y-[20%] text-[12vw] md:text-[18vw] font-extrabold text-white/10 leading-none select-none whitespace-nowrap pointer-events-none text-center">
+        OVERSOCKS
       </h1>
 
       {/* Main Footer Content */}
@@ -15,12 +15,12 @@ export default function Footer() {
         {/* Brand Info */}
         <div>
 <h2 className="text-3xl font-anton hover:text-red-500 font-extrabold mb-2">
-  Oversocs<sup>©</sup>
+  OversocKs<sup>©</sup>
 </h2>
 
           <p className="text-white/70 mb-4">Step into bold comfort with premium socks.</p>
           <p className="text-white underline hover:text-red-500 cursor-pointer transition">
-            help@oversocs.com
+            help@oversocks.com
           </p>
         </div>
 
@@ -75,7 +75,7 @@ export default function Footer() {
 
       {/* Bottom Strip */}
       <div className="mt-12 pt-4 px-6 flex flex-col md:flex-row justify-between items-center text-xs text-white/70 relative z-10">
-        <p>&copy; {new Date().getFullYear()} Oversocs. All Rights Reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Oversocks. All Rights Reserved.</p>
         <div className="flex gap-6 mt-2 md:mt-0">
           <a href="#" className="hover:text-red-500 transition">Terms of Use</a>
           <a href="#" className="hover:text-red-500 transition">Privacy Policy</a>

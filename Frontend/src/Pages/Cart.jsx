@@ -1,25 +1,46 @@
-import bgImage from "../assets/NoBG.png";
+import wishlist from "../assets/wishlist.jpg";
+import { motion } from "framer-motion";
 
 export default function Cart() {
   return (
-    <div
-      className="min-h-screen bg-cover bg-center py-32 px-4 flex flex-col items-center text-white"
-      style={{ backgroundImage: `url(${bgImage})` }}
-    >
-      <h1 className="text-[clamp(2rem,5vw,4rem)] font-bebas font-extrabold uppercase tracking-wide text-white mb-10">
-        Your Cart
-      </h1>
+    <div className="min-h-screen bg-[#f5f5dc] flex flex-col items-center justify-center px-4 text-white relative overflow-hidden">
 
-      <div className="bg-black border border-red-500 shadow-lg p-8 rounded-2xl max-w-xl w-full text-center">
-        <p className="text-lg text-gray-400 mb-4">No items added yet.</p>
-        
+      {/* Centered Wishlist Background Image Rotated */}
+      <img
+        src={wishlist}
+        alt="Oversocs Background"
+        className="absolute top-1/2 left-1/2 w-[150vh] h-auto -translate-x-1/2 -translate-y-1/2 rotate-90 z-0 opacity-40 pointer-events-none"
+      />
+
+      
+      {/* Heading with entrance animation */}
+      <motion.h1
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="text-[clamp(2rem,5vw,4rem)] font-anton font-extrabold uppercase tracking-wide text-black mb-10 z-10"
+      >
+        Your Cart
+      </motion.h1>
+
+      {/* Cart Box */}
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="bg-black/90 border border-red-500 shadow-2xl backdrop-blur-sm p-8 md:p-12 rounded-3xl max-w-xl w-full text-center z-10"
+      >
+        <p className="text-lg text-white/60 mb-6 tracking-wide">
+          No items added yet.
+        </p>
+
         <button
-          className="mt-4 bg-gray-500 text-white uppercase px-6 py-3 rounded-xl font-bold cursor-not-allowed hover:bg-gray-600 transition"
           disabled
+          className="mt-4 bg-[#F5F5DC] text-black uppercase px-8 py-3 rounded-xl font-bold cursor-not-allowed hover:bg-red-600 hover:text-white transition"
         >
           Checkout (Coming Soon)
         </button>
-      </div>
+      </motion.div>
     </div>
   );
 }

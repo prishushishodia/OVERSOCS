@@ -38,9 +38,8 @@ export default function Navbar() {
           <div className="max-w-7xl mx-auto px-6 py-2 flex justify-between items-center">
             <div className="flex items-center space-x-4">
               <NavLink to="/returns" className="hover:text-oversocsRed transition">Return/Exchange</NavLink>
-              <NavLink to="/size-guide" className="hover:text-oversocsRed transition">Size Guide</NavLink>
               <NavLink to="/track-order" className="hover:text-oversocsRed transition">Track Your Order</NavLink>
-              <NavLink to="/customer-care" className="hover:text-oversocsRed transition">Customer Care</NavLink>
+
             </div>
             <div className="flex items-center space-x-4">
               <NavLink to="/help" className="hover:text-oversocsRed transition">Help</NavLink>
@@ -70,7 +69,7 @@ export default function Navbar() {
                     <ul className="space-y-5 text-lg">
                       {["no-show", "low-cut", "ankle-length", "full-length"].map((item) => (
                         <li key={item}>
-                          <NavLink to={`/shop?category=${item}`} className="hover:text-beige hover:scale-115 transition transform block">
+                          <NavLink to={`/shop?category=${item}`} className="hover:text-red-500 hover:scale-115 transition transform block">
                             {item.replace("-", " ").toUpperCase()}
                           </NavLink>
                         </li>
@@ -83,7 +82,7 @@ export default function Navbar() {
                     <ul className="space-y-5 text-lg">
                       {["work", "sports", "everyday"].map((item) => (
                         <li key={item}>
-                          <NavLink to={`/shop?activity=${item}`} className="hover:text-beige hover:scale-115 transition transform block">
+                          <NavLink to={`/shop?activity=${item}`} className="hover:text-red-500 hover:scale-115 transition transform block">
                             {item.charAt(0).toUpperCase() + item.slice(1)}
                           </NavLink>
                         </li>
@@ -96,7 +95,7 @@ export default function Navbar() {
                     <ul className="space-y-5 text-lg">
                       {["winter", "summer", "allseason"].map((item) => (
                         <li key={item}>
-                          <NavLink to={`/shop?season=${item}`} className="hover:text-beige hover:scale-115 transition transform block">
+                          <NavLink to={`/shop?season=${item}`} className="hover:text-red-500 hover:scale-115 transition transform block">
                             {item.toUpperCase()}
                           </NavLink>
                         </li>

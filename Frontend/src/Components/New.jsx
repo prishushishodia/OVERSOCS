@@ -9,9 +9,9 @@ export default function NewAndFeatured() {
   const sectionRef = useRef(null);
 
   const featuredProducts = [
-    { id: 1, name: "Oversocs Classic", desc: "Available in all stores", price: "₹299", image: woman },
-    { id: 2, name: "Oversocs Bold Stripes", desc: "Online exclusive", price: "₹349", image: man },
-    { id: 3, name: "Oversocs Winter Comfy", desc: "Limited Edition", price: "₹399", image: mng },
+    { id: 1, name: "Oversocks Classic", desc: "Available in all stores", price: "₹299", image: woman },
+    { id: 2, name: "Oversocks Bold Stripes", desc: "Online exclusive", price: "₹349", image: man },
+    { id: 3, name: "Oversocks Winter Comfy", desc: "Limited Edition", price: "₹399", image: mng },
   ];
 
   useEffect(() => {

@@ -94,7 +94,7 @@ export default function AboutUs() {
       <div className="absolute bottom-20 -left-0 w-[600px] h-[600px] bg-[#B6B09F] opacity-70 blur-3xl rounded-full z-0" />
 
       <div className="absolute top-12 left-0 w-full text-black z-0 space-y-4">
-        <VelocityScroller text="OVERSOCS" direction={-1} velocity={80} textSize="text-[50px] md:text-[80px]" />
+        <VelocityScroller text="OVERSOCKS" direction={-1} velocity={80} textSize="text-[50px] md:text-[80px]" />
 
 
       </div>
@@ -110,7 +110,7 @@ export default function AboutUs() {
 
       <div className="space-y-20 relative z-10 max-w-5xl mx-auto text-center">
         <ScrollFloat containerClassName="text-5xl text-black md:text-6xl font-anton font-extrabold uppercase tracking-widest">
-          About OVERSOCS
+          About OVERSOCKS
         </ScrollFloat>
 
         <ScrollFloat textClassName="text-black leading-relaxed text-lg md:text-xl max-w-3xl mx-auto">

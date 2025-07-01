@@ -7,16 +7,20 @@ import Login from "../Pages/Login";
 import Register from "../Pages/Register";
 import MainLayout from "../Layouts/MainLayout";
 import User from "../Pages/User";
-import WishlistPage from "../Pages/Wishlist"; // Import Wishlist Page
+import WishlistPage from "../Pages/Wishlist";
+import HelpPage from "../Pages/Help";
+import TrackOrderPage from "../Pages/TrackOrder";
+import ReturnExchangePage from "../Pages/ReturnExchange";
 
 export default function AppRoutes() {
   return (
     <Routes>
       <Route element={<MainLayout />}>
 
+        {/* Homepage */}
         <Route path="/" element={<Home />} />
 
-        {/* Shop Page with Filter Support */}
+        {/* Shop with Filters */}
         <Route path="/shop" element={<Products />} />
 
         {/* Product Detail */}
@@ -34,6 +38,11 @@ export default function AppRoutes() {
 
         {/* User Account */}
         <Route path="/account" element={<User />} />
+
+        {/* New Pages */}
+        <Route path="/help" element={<HelpPage />} />
+        <Route path="/track-order" element={<TrackOrderPage />} />
+        <Route path="/returns" element={<ReturnExchangePage />} />
 
       </Route>
     </Routes>
