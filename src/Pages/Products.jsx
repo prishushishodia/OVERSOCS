@@ -61,16 +61,17 @@ export default function Products() {
   const sidebarRef = useRef(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsSticky(false); // Footer visible: sidebar should stop
-        } else {
-          setIsSticky(true); // Footer not visible: sidebar stays fixed
-        }
-      },
-      { root: null, threshold: 0 }
-    );
+   const observer = new IntersectionObserver(
+  ([entry]) => {
+    if (entry.isIntersecting) {
+      setIsSticky(false); // Footer visible, sidebar scrolls naturally
+    } else {
+      setIsSticky(true); // Sidebar stays fixed at top
+    }
+  },
+  { root: null, threshold: 0 }
+);
+
 
     if (footerRef.current) {
       observer.observe(footerRef.current);
@@ -128,13 +129,13 @@ export default function Products() {
           backgroundPosition: "center",
         }}
       >
-        {/* Sidebar */}
-  <aside
+<aside
   ref={sidebarRef}
-  className={`w-64 ${
-    isSticky ? "h-screen fixed top-0 left-0" : "h-[calc(100vh-7rem)] absolute top-28 left-0"
-  } p-6 border-r border-gray-800 z-20 overflow-y-auto bg-[#F5F5DC] transition-all duration-300`}
+  className={`w-64 p-6 border-r border-gray-800 z-20 overflow-y-auto bg-[#F5F5DC] transition-all duration-300 ${
+    isSticky ? "fixed top-0 left-0 h-screen" : "relative top-28 h-[calc(100vh-7rem)]"
+  }`}
 >
+
   <div className="translate-y-30">
 
   <h3 className="text-3xl  font-anton mb-6">FILTERS</h3>

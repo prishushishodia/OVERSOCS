@@ -1,8 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Michroma&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 
 @theme{
   --font-bebas:Bebas Neue,"sans-serif";
   --font-anton:Anton,"sans-serif";
+  --font-michroma:Michroma,"sans-serif";
+  --font-Montserrat:Montserrat,"sans-serif";
 }

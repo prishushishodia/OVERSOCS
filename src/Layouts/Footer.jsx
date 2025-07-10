@@ -2,7 +2,7 @@ import { FaInstagram, FaFacebookF, FaTwitter } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#000000] pt-20 pb-52 text-white font-heading uppercase relative overflow-hidden">
+    <footer className="bg-[#000000] pt-20 pb-52 text-white/70 font-heading uppercase relative overflow-hidden">
 
       {/* Big Translucent OVERSOCKS Text */}
       <h1 className="absolute left-0 right-0 bottom-0 translate-x-[-6%] translate-y-[20%] text-[12vw] md:text-[18vw] font-extrabold text-white/10 leading-none select-none whitespace-nowrap pointer-events-none text-center">
@@ -43,7 +43,7 @@ export default function Footer() {
             <li><a href="#" className="hover:text-red-500 transition">Careers</a></li>
           </ul>
 
-          <h3 className="text-lg font-bold mb-3 text-white">Social</h3>
+          <h3 className="text-lg font-bold mb-3 text-white/70">Social</h3>
           <div className="flex text-white/40 gap-4">
             <a href="#" className="hover:text-red-500 transition"><FaInstagram /></a>
             <a href="#" className="hover:text-red-500 transition"><FaFacebookF /></a>
@@ -61,9 +61,9 @@ export default function Footer() {
             <input
               type="email"
               placeholder="Your email address"
-              className="flex-grow px-4 py-2 bg-[#F5F5DC] text-black outline-none placeholder-gray-500"
+              className="flex-grow px-4 py-2 bg-white/70 text-black outline-none placeholder-gray-500"
             />
-            <button className="text-[#F5F5DC] bg-black px-4 py-2 hover:bg-red-600 transition">
+            <button className="text-white bg-black px-4 py-2 hover:bg-red-600 transition">
               →
             </button>
           </div>

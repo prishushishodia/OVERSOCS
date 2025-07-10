@@ -77,25 +77,23 @@ function ShinyModel({ scale = 5 }) {
       child.material = new THREE.MeshStandardMaterial({
         color: "#000000",
         roughness: 0.01,
-        metalness: 5,
+        metalness: 10,
       });
     }
   });
 
-  return <primitive object={scene} ref={modelRef} scale={1.34} />;
+  return <primitive object={scene} ref={modelRef} scale={1.3} />;
 }
 
 export default function AboutUs() {
   return (
-    <section id="about" className="relative py-80 px-4 text-black z-10 bg-[#F5F5DC] overflow-hidden">
+    <section id="about" className="relative py-80 px-4 text-black z-10 bg-white overflow-hidden">
 
-      <div className="absolute top-30 -left-20 w-[500px] h-[400px] bg-red-500 opacity-30 blur-3xl rounded-full z-0" />
-      <div className="absolute bottom-30 -right-20 w-[500px] h-[500px] bg-white opacity-80 blur-3xl rounded-full z-0" />
-      <div className="absolute bottom-20 -left-0 w-[600px] h-[600px] bg-[#B6B09F] opacity-70 blur-3xl rounded-full z-0" />
+
 
       <div className="absolute top-12 left-0 w-full text-black z-0 space-y-4">
-        <VelocityScroller text="OVERSOCKS" direction={-1} velocity={80} textSize="text-[50px] md:text-[80px]" />
-
+        <VelocityScroller text="OVERSOCKS" direction={1} velocity={80} textSize="text-[50px] md:text-[80px]" />
+<VelocityScroller text="OVERSOCKS" direction={-1} velocity={80} textSize="text-[50px] md:text-[80px]" />
 
       </div>
 
@@ -109,7 +107,7 @@ export default function AboutUs() {
       </div>
 
       <div className="space-y-20 relative z-10 max-w-5xl mx-auto text-center">
-        <ScrollFloat containerClassName="text-5xl text-black md:text-6xl font-anton font-extrabold uppercase tracking-widest">
+        <ScrollFloat containerClassName="text-5xl text-red-500 md:text-7xl font-Montserrat  uppercase">
           About OVERSOCKS
         </ScrollFloat>
 
@@ -132,7 +130,7 @@ export default function AboutUs() {
             desc: "Oversocks ships worldwide with lightning-fast dispatch — your next bold look is only days away."
           }].map(({ title, desc }) => (
             <div key={title} className="space-y-6 group">
-              <ScrollFloat containerClassName="text-4xl md:text-5xl font-extrabold uppercase tracking-widest text-black group-hover:text-red-500 transition-all">
+              <ScrollFloat containerClassName="text-4xl md:text-5xl font-Montserrat font-thin uppercase  text-black group-hover:text-red-500 transition-all">
                 {title}
               </ScrollFloat>
               <ScrollFloat textClassName="text-black leading-relaxed text-lg md:text-xl ">
