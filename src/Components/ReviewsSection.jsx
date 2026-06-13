@@ -1,47 +1,88 @@
+import { FiStar } from "react-icons/fi";
+import Marquee from "./Marquee";
+import Reveal, { RevealItem } from "./Reveal";
 import review1 from "../assets/1.jpg";
 import review2 from "../assets/2.jpg";
 import review3 from "../assets/3.jpg";
 import review4 from "../assets/4.jpg";
 import review5 from "../assets/5.jpg";
 
+const testimonials = [
+  {
+    quote: "The only socks I reach for now. They hug the ankle without choking it — and they survive the wash looking new.",
+    name: "Aarav M.",
+    handle: "@aaravruns",
+  },
+  {
+    quote: "Got the Acid Trip crew and immediately got asked where they're from. Loud in the best way.",
+    name: "Nisha K.",
+    handle: "@nishawears",
+  },
+  {
+    quote: "Compression pair held up through a half-marathon with zero blisters. Genuinely impressed.",
+    name: "Dev R.",
+    handle: "@devonfoot",
+  },
+];
+
+const ugc = [review1, review2, review3, review4, review5];
+
 export default function ReviewsSection() {
-  const reviews = [
-    { id: 1, image: review1, text: "Limited Edition Sock Drops!" },
-    { id: 2, image: review2, text: "Bold Graphics, Bolder Socks" },
-    { id: 3, image: review3, text: "Step back in time with our Retro '80s Sock Collection!" },
-    { id: 4, image: review4, text: "Comfort that brings a smile to every step!" },
-    { id: 5, image: review5, text: "Socks designed for sunny days and cozy summer vibes!" },
-  ];
-
   return (
-    <>
-      {/* Heading Section with Beige Background */}
-      <section className="relative w-full  bg-white py-12 px-4">
-        <h2 className="text-2xl md:text-4xl -translate-x-85 translate-y-5 font-Montserrat font-light uppercase text-center mb-8">
-          Loved by Our Community
-        </h2>
-      </section>
+    <section className="bg-canvas-deep py-24 md:py-32">
+      <div className="container-x">
+        <Reveal className="mb-14 text-center">
+          <p className="mb-3 inline-flex items-center gap-3 font-grotesk text-[11px] uppercase tracking-[0.3em] text-ember">
+            <span className="h-px w-8 bg-ember" /> 4.9 / 5 from 2,300+ pairs sold
+            <span className="h-px w-8 bg-ember" />
+          </p>
+          <h2 className="text-display text-5xl text-ink md:text-7xl">Loved by the bold</h2>
+        </Reveal>
 
-      {/* Image Grid Section - no background override */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-0">
-        {reviews.map((review) => (
-          <div key={review.id} className="relative group overflow-hidden">
-            <img
-              src={review.image}
-              alt={review.text}
-              className="w-full h-full object-cover aspect-[9/16]"
-            />
-            <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-              <button className="text-white bg-black/70 p-3 rounded-full hover:bg-white hover:text-black transition">
-                ▶
-              </button>
-            </div>
-            <p className="absolute bottom-3 left-3 right-3 text-white font-semibold text-sm leading-snug">
-              {review.text}
-            </p>
-          </div>
-        ))}
+        <Reveal stagger className="grid gap-6 md:grid-cols-3">
+          {testimonials.map((t) => (
+            <RevealItem
+              key={t.name}
+              className="flex flex-col justify-between border border-ink/15 bg-canvas p-8"
+            >
+              <div>
+                <div className="mb-5 flex gap-1 text-ember">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <FiStar key={i} className="fill-ember" />
+                  ))}
+                </div>
+                <p className="font-archivo text-lg leading-relaxed text-ink">"{t.quote}"</p>
+              </div>
+              <div className="mt-8 flex items-center gap-3">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-ink font-grotesk text-sm text-cream">
+                  {t.name.charAt(0)}
+                </span>
+                <div className="font-grotesk text-sm">
+                  <p className="font-medium text-ink">{t.name}</p>
+                  <p className="text-ink-soft">{t.handle}</p>
+                </div>
+              </div>
+            </RevealItem>
+          ))}
+        </Reveal>
       </div>
-    </>
+
+      {/* UGC image strip */}
+      <div className="mt-16">
+        <Marquee speed={40} pauseOnHover>
+          {ugc.map((src, i) => (
+            <div key={i} className="mx-2 aspect-[4/5] w-56 shrink-0 overflow-hidden md:w-64">
+              <img
+                src={src}
+                alt="From the community"
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-cover sepia transition-all duration-500 hover:sepia-0"
+              />
+            </div>
+          ))}
+        </Marquee>
+      </div>
+    </section>
   );
 }

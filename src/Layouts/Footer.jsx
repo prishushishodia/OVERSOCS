@@ -1,86 +1,116 @@
-import { FaInstagram, FaFacebookF, FaTwitter } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { FaInstagram, FaTiktok, FaXTwitter } from "react-icons/fa6";
+import { FiArrowRight } from "react-icons/fi";
+
+const columns = [
+  {
+    title: "Shop",
+    links: [
+      ["Men", "/shop?category=men"],
+      ["Women", "/shop?category=women"],
+      ["Kids", "/shop?category=kids"],
+      ["New In", "/shop?tag=new"],
+    ],
+  },
+  {
+    title: "Help",
+    links: [
+      ["Track Order", "/track-order"],
+      ["Returns & Exchange", "/returns"],
+      ["FAQ", "/help"],
+      ["Account", "/account"],
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      ["Our Story", "/#about"],
+      ["Careers", "/help"],
+      ["Sustainability", "/help"],
+      ["Contact", "/help"],
+    ],
+  },
+];
 
 export default function Footer() {
   return (
-    <footer className="bg-[#000000] pt-20 pb-52 text-white/70 font-heading uppercase relative overflow-hidden">
+    <footer className="relative overflow-hidden bg-ink pt-20 text-cream">
+      <div className="container-x">
+        {/* Top: newsletter + columns */}
+        <div className="grid gap-12 border-b border-cream/10 pb-16 lg:grid-cols-[1.4fr_2fr]">
+          <div>
+            <h2 className="text-display text-4xl md:text-5xl">
+              Join the <span className="text-ember">drop list</span>
+            </h2>
+            <p className="mt-4 max-w-sm font-archivo text-cream/60">
+              Early access to limited runs, restocks and members-only colourways. No spam — just the good stuff.
+            </p>
+            <form
+              className="mt-6 flex max-w-sm items-center border border-cream/25 focus-within:border-ember"
+              onSubmit={(e) => e.preventDefault()}
+            >
+              <input
+                type="email"
+                required
+                placeholder="Your email address"
+                className="flex-grow bg-transparent px-4 py-3 font-grotesk text-sm text-cream placeholder-cream/40 focus:outline-none"
+              />
+              <button
+                aria-label="Subscribe"
+                className="flex h-12 w-12 items-center justify-center bg-ember text-cream transition-colors hover:bg-cream hover:text-ink"
+              >
+                <FiArrowRight />
+              </button>
+            </form>
+          </div>
 
-      {/* Big Translucent OVERSOCKS Text */}
-      <h1 className="absolute left-0 right-0 bottom-0 translate-x-[-6%] translate-y-[20%] text-[12vw] md:text-[18vw] font-extrabold text-white/10 leading-none select-none whitespace-nowrap pointer-events-none text-center">
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
+            {columns.map((col) => (
+              <div key={col.title}>
+                <h3 className="mb-4 font-grotesk text-xs uppercase tracking-[0.2em] text-cream/50">
+                  {col.title}
+                </h3>
+                <ul className="space-y-3 font-grotesk text-sm">
+                  {col.links.map(([label, href]) => (
+                    <li key={label}>
+                      <Link to={href} className="text-cream/80 transition-colors hover:text-ember">
+                        {label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Bottom strip */}
+        <div className="flex flex-col items-center justify-between gap-6 py-8 md:flex-row">
+          <p className="font-grotesk text-xs uppercase tracking-[0.18em] text-cream/50">
+            © {new Date().getFullYear()} Oversocks — Step Boldly
+          </p>
+          <div className="flex gap-4">
+            {[FaInstagram, FaTiktok, FaXTwitter].map((Icon, i) => (
+              <a
+                key={i}
+                href="#"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-cream/20 text-cream/70 transition-colors hover:border-ember hover:bg-ember hover:text-cream"
+              >
+                <Icon />
+              </a>
+            ))}
+          </div>
+          <div className="flex gap-6 font-grotesk text-xs uppercase tracking-[0.18em] text-cream/50">
+            <Link to="/help" className="hover:text-ember">Terms</Link>
+            <Link to="/help" className="hover:text-ember">Privacy</Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Oversized wordmark bleed */}
+      <h1 className="text-display pointer-events-none select-none whitespace-nowrap text-center text-[24vw] leading-[0.7] text-cream/[0.06]">
         OVERSOCKS
       </h1>
-
-      {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
-
-        {/* Brand Info */}
-        <div>
-<h2 className="text-3xl font-anton hover:text-red-500 font-extrabold mb-2">
-  OversocKs<sup>©</sup>
-</h2>
-
-          <p className="text-white/70 mb-4">Step into bold comfort with premium socks.</p>
-          <p className="text-white underline hover:text-red-500 cursor-pointer transition">
-            help@oversocks.com
-          </p>
-        </div>
-
-        {/* Shop Links */}
-        <div>
-          <h3 className="text-lg font-bold mb-3">Shop</h3>
-          <ul className="flex flex-col gap-2 text-white/40">
-            <li><a href="#" className="hover:text-red-500 transition">Men</a></li>
-            <li><a href="#" className="hover:text-red-500 transition">Women</a></li>
-            <li><a href="#" className="hover:text-red-500 transition">Kids</a></li>
-            <li><a href="#" className="hover:text-red-500 transition">Limited Edition</a></li>
-          </ul>
-        </div>
-
-        {/* About & Social */}
-        <div>
-          <h3 className="text-lg font-bold mb-3">About</h3>
-          <ul className="flex flex-col gap-2 text-white/40 mb-6">
-            <li><a href="#" className="hover:text-red-500 transition">Our Story</a></li>
-            <li><a href="#" className="hover:text-red-500 transition">Careers</a></li>
-          </ul>
-
-          <h3 className="text-lg font-bold mb-3 text-white/70">Social</h3>
-          <div className="flex text-white/40 gap-4">
-            <a href="#" className="hover:text-red-500 transition"><FaInstagram /></a>
-            <a href="#" className="hover:text-red-500 transition"><FaFacebookF /></a>
-            <a href="#" className="hover:text-red-500 transition"><FaTwitter /></a>
-          </div>
-        </div>
-
-        {/* Newsletter */}
-        <div>
-          <h3 className="text-lg font-bold mb-3">Subscribe</h3>
-          <p className="text-white/70 mb-4">
-            Want bold updates & product news? Join our list.
-          </p>
-          <div className="flex items-center bg-black border border-gray-500 rounded-xl overflow-hidden">
-            <input
-              type="email"
-              placeholder="Your email address"
-              className="flex-grow px-4 py-2 bg-white/70 text-black outline-none placeholder-gray-500"
-            />
-            <button className="text-white bg-black px-4 py-2 hover:bg-red-600 transition">
-              →
-            </button>
-          </div>
-          <p className="text-white/70 text-xs mt-2">
-            By subscribing, you agree to our privacy policy.
-          </p>
-        </div>
-      </div>
-
-      {/* Bottom Strip */}
-      <div className="mt-12 pt-4 px-6 flex flex-col md:flex-row justify-between items-center text-xs text-white/70 relative z-10">
-        <p>&copy; {new Date().getFullYear()} Oversocks. All Rights Reserved.</p>
-        <div className="flex gap-6 mt-2 md:mt-0">
-          <a href="#" className="hover:text-red-500 transition">Terms of Use</a>
-          <a href="#" className="hover:text-red-500 transition">Privacy Policy</a>
-        </div>
-      </div>
     </footer>
   );
 }

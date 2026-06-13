@@ -12,11 +12,11 @@ function App() {
   }, [setPercent]);
 
   useEffect(() => {
-    const originalTitle = "Oversocks — Drip from the Ankle";
+    const originalTitle = "OVERSOCKS — Step Boldly";
     const titles = [
-      "We Miss You 💔",
-      "🔥 Don't Miss Out!",
-      "👀 Come Back!!"
+      "👀 Come back!",
+      "🧦 Your socks miss you",
+      "🔥 New drops inside",
     ];
     let index = 0;
     let interval = null;
@@ -26,7 +26,7 @@ function App() {
         interval = setInterval(() => {
           document.title = titles[index % titles.length];
           index++;
-        }, 100);
+        }, 1200);
       } else {
         clearInterval(interval);
         document.title = originalTitle;

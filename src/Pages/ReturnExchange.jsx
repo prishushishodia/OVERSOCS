@@ -1,60 +1,54 @@
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import wishlist from "../assets/wishlist.jpg";
-import { ArrowLeftCircle } from "lucide-react";
+import { FiArrowLeft, FiCheck } from "react-icons/fi";
+import Reveal from "../Components/Reveal";
+
+const points = [
+  "Items must be unworn, unwashed and in original packaging.",
+  "Returns accepted within 7 days of delivery.",
+  "Sale items are non-returnable unless defective.",
+  "Exchanges are subject to stock availability.",
+];
 
 export default function ReturnExchangePage() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-[#F5F5DC] text-black flex flex-col items-center justify-center px-4 relative overflow-hidden">
+    <main className="min-h-screen bg-canvas pt-28 md:pt-32">
+      <div className="container-x py-10">
+        <Reveal className="mb-12 border-b border-ink/10 pb-8">
+          <p className="mb-2 font-grotesk text-[11px] uppercase tracking-[0.3em] text-ember">No-stress returns</p>
+          <h1 className="text-display text-5xl text-ink md:text-7xl">Returns & exchange</h1>
+        </Reveal>
 
-      {/* Background Image */}
-      <img
-        src={wishlist}
-        alt="Oversocs Background"
-        className="absolute top-1/2 left-1/2 w-[150vh] h-auto -translate-x-1/2 -translate-y-1/2 rotate-90 z-0 opacity-30 pointer-events-none"
-      />
+        <Reveal className="mx-auto max-w-3xl space-y-8">
+          <p className="font-archivo text-lg leading-relaxed text-ink">
+            We want you to love your socks. If something isn't right, you can return or
+            exchange your items within <span className="font-semibold text-ember">7 days</span> of delivery —
+            quick, simple, no interrogation.
+          </p>
 
-      {/* Heading */}
-      <motion.h1
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="text-[clamp(2rem,5vw,4rem)] font-anton font-extrabold uppercase tracking-wide mt-32 mb-10 z-10 text-center"
-      >
-        Return & Exchange
-      </motion.h1>
+          <ul className="space-y-4 border-y border-ink/15 py-8">
+            {points.map((p) => (
+              <li key={p} className="flex items-start gap-3 font-archivo text-ink">
+                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-ember text-cream">
+                  <FiCheck className="text-xs" />
+                </span>
+                {p}
+              </li>
+            ))}
+          </ul>
 
-      {/* Card Content */}
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="w-full max-w-2xl p-6 bg-[#F5F5DC] border border-black rounded-3xl shadow-xl z-10 text-center space-y-6"
-      >
-        <p className="text-lg leading-relaxed">
-          We want you to love your socks! If you're not satisfied with your purchase, you can return or exchange your items within <span className="font-bold">15 days</span> of delivery.
-        </p>
+          <p className="font-archivo text-ink-soft">
+            To start a return, email{" "}
+            <a href="mailto:help@oversocks.com" className="font-semibold text-ink link-underline">help@oversocks.com</a>{" "}
+            with your order number and we'll walk you through it.
+          </p>
 
-        <ul className="text-left list-disc list-inside space-y-2">
-          <li>Items must be unworn, unwashed, and in original packaging.</li>
-          <li>Sale items are non-returnable unless defective.</li>
-          <li>Exchanges are subject to stock availability.</li>
-        </ul>
-
-        <p className="text-lg">
-          For returns or exchanges, email us at <span className="font-bold">support@oversocs.com</span> with your order details. We'll assist you with the process.
-        </p>
-
-        <button
-          onClick={() => navigate("/shop")}
-          className="mt-4 bg-black text-[#F5F5DC] px-6 py-3 rounded-xl uppercase tracking-wide hover:bg-red-600 hover:text-white transition flex items-center justify-center gap-2 mx-auto"
-        >
-          <ArrowLeftCircle className="w-5 h-5" />
-          Back to Shop
-        </button>
-      </motion.div>
-    </div>
+          <button onClick={() => navigate("/shop")} className="btn btn-solid flex">
+            <FiArrowLeft /> Back to shop
+          </button>
+        </Reveal>
+      </div>
+    </main>
   );
 }

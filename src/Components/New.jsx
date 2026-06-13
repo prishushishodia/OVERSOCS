@@ -1,80 +1,61 @@
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
+import { Link } from "react-router-dom";
+import { FiArrowRight } from "react-icons/fi";
 import prod1 from "../assets/kpop.jpg";
 import prod2 from "../assets/mnop.jpg";
+import Reveal from "./Reveal";
 
-export default function New() {
-  const sectionRef = useRef(null);
-  const headingRef = useRef(null);
-  const buttonRef = useRef(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(headingRef.current, {
-        opacity: 0,
-        y: 50,
-        duration: 1,
-        ease: "power3.out",
-      });
-
-      gsap.from(buttonRef.current, {
-        opacity: 0,
-        y: 50,
-        delay: 0.3,
-        duration: 1,
-        ease: "power3.out",
-      });
-
-      const images = sectionRef.current.querySelectorAll(".image-item");
-      gsap.from(images, {
-        opacity: 0,
-        y: 30,
-        stagger: 0.2,
-        duration: 1,
-        ease: "power3.out",
-        delay: 0.5,
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
+/**
+ * Editorial split — a magazine-style break between the catalogue and the
+ * social proof, pairing two full-bleed images with a bold call to action.
+ */
+export default function EditorialSplit() {
   return (
-    <section
-      ref={sectionRef}
-      className="w-full bg-white font-Montserrat font-light relative z-10"
-    >
-      {/* Text & Button */}
-      <div className="max-w-7xl mx-auto px-4 md:px-10 py-16 flex justify-between items-center flex-wrap gap-4">
-        <div ref={headingRef}>
-          <h2 className="text-3xl md:text-4xl text-black">New In</h2>
-          <p className="text-gray-700 mt-2 max-w-m">
-            Upgrade your closet with everything trendy and new
+    <section className="bg-canvas py-24 md:py-32">
+      <div className="container-x">
+        <Reveal className="mb-12 grid items-end gap-8 md:grid-cols-2">
+          <div>
+            <p className="mb-3 flex items-center gap-3 font-grotesk text-[11px] uppercase tracking-[0.3em] text-ember">
+              <span className="h-px w-8 bg-ember" />
+              New In
+            </p>
+            <h2 className="text-display text-5xl text-ink md:text-7xl">
+              Upgrade your rotation
+            </h2>
+          </div>
+          <p className="font-archivo text-base leading-relaxed text-ink-soft md:max-w-md md:justify-self-end">
+            Fresh colourways and limited runs, dropped weekly. Get them before
+            they sell through — our best pairs never sit still.
+            <Link
+              to="/shop?tag=new"
+              className="mt-5 inline-flex items-center gap-2 font-grotesk text-sm uppercase tracking-[0.18em] text-ink link-underline"
+            >
+              Shop new arrivals <FiArrowRight />
+            </Link>
           </p>
-        </div>
-        <button
-          ref={buttonRef}
-          className="px-6 py-2 bg-black text-[#F5F5DC] rounded-full hover:bg-red-500 hover:text-black transition-transform hover:scale-105"
-        >
-          Shop New Arrivals →
-        </button>
-      </div>
+        </Reveal>
 
-      {/* Two Side-by-Side Images */}
-      <div className="flex w-full h-[500px] sm:h-[600px] md:h-[700px] overflow-hidden">
-        <div className="image-item w-1/2 h-full overflow-hidden">
-          <img
-            src={prod1}
-            alt="Oversocs Classic Crew Socks"
-            className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-          />
-        </div>
-        <div className="image-item w-1/2 h-full overflow-hidden">
-          <img
-            src={prod2}
-            alt="Oversocs Bold Stripe Socks"
-            className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-          />
+        <div className="grid gap-4 md:grid-cols-2">
+          {[
+            { img: prod1, label: "The Acid Collection", to: "/shop?tag=limited" },
+            { img: prod2, label: "Everyday Essentials", to: "/shop?activity=everyday" },
+          ].map((item) => (
+            <Reveal key={item.label}>
+              <Link to={item.to} className="group relative block aspect-[16/11] overflow-hidden">
+                <img
+                  src={item.img}
+                  alt={item.label}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-full w-full object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/70 to-transparent" />
+                <div className="absolute inset-x-6 bottom-6 flex items-center justify-between">
+                  <h3 className="text-display text-3xl text-cream md:text-4xl">{item.label}</h3>
+                  <FiArrowRight className="text-2xl text-cream transition-transform duration-300 group-hover:translate-x-2" />
+                </div>
+              </Link>
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>

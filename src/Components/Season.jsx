@@ -1,61 +1,43 @@
-import React from 'react';
-import latest1 from '../assets/a.jpg';
-import latest4 from '../assets/c.jpg';
-import latest5 from '../assets/b.jpg';
-import latest6 from '../assets/d.jpg';
+import { Link } from "react-router-dom";
+import { FiArrowRight } from "react-icons/fi";
+import { products } from "../data/products";
+import ProductCard from "./ProductCard";
+import Reveal, { RevealItem } from "./Reveal";
 
-const Latest = () => {
+/**
+ * Latest Drop — the first taste of the catalogue. Pulls the four
+ * freshest pairs straight from the shared product data.
+ */
+export default function LatestDrop() {
+  const drop = products.slice(0, 4);
+
   return (
-    <div className="w-full font-Montserrat  bg-white py-20 px-10 relative z-10 ">
-      <h2 className="text-sm  tracking-widest text-gray-600 mb-10 text-center">
-        LATEST DROP
-      </h2>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
-        {[
-          {
-            img: latest1,
-            title: 'WHITE BOX BOX T-SHIRT',
-            price: 'Rs. 495',
-          },
-          {
-            img: latest6,
-            title: 'DRS PURPLE FULL SLEEVE JERSEY',
-            price: 'Rs. 1,495',
-          },
-          {
-            img: latest4,
-            title: 'BLACK BOX BOX T-SHIRT',
-            price: 'Rs. 999',
-          },
-          {
-            img: latest5,
-            title: 'DRS RED FULL SLEEVE JERSEY',
-            price: 'Rs. 1,225',
-          },
-        ].map((item, index) => (
-          <div
-            key={index}
-            className="text-center transform transition duration-300 hover:scale-105 animate-fade-slide"
-          >
-            <img
-              src={item.img}
-              alt={item.title}
-              className="w-full h-auto object-cover  shadow-lg"
-            />
-            <h3 className="mt-4 font">{item.title}</h3>
-            <p className="text-gray-500">{item.price}</p>
+    <section className="bg-canvas py-24 md:py-32">
+      <div className="container-x">
+        <Reveal className="mb-12 flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <p className="mb-3 flex items-center gap-3 font-grotesk text-[11px] uppercase tracking-[0.3em] text-ember">
+              <span className="h-px w-8 bg-ember" />
+              Latest Drop
+            </p>
+            <h2 className="text-display text-5xl text-ink md:text-7xl">Fresh on the line</h2>
           </div>
-        ))}
-      </div>
+          <Link to="/shop?tag=new" className="link-underline font-grotesk text-sm uppercase tracking-[0.18em] text-ink">
+            View all <FiArrowRight className="ml-1 inline" />
+          </Link>
+        </Reveal>
 
-      <div className="flex justify-center mt-10">
-        <button className="border border-black px-6 py-2 hover:bg-black hover:text-white transition">
-          DISCOVER MORE
-        </button>
+        <Reveal
+          stagger
+          className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4"
+        >
+          {drop.map((product, i) => (
+            <RevealItem key={product.id}>
+              <ProductCard product={product} index={i} />
+            </RevealItem>
+          ))}
+        </Reveal>
       </div>
-    </div>
+    </section>
   );
-};
-
-export default Latest;
+}

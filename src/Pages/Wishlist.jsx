@@ -1,98 +1,61 @@
-import { useEffect } from "react";
-import { motion } from "framer-motion";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Heart, Trash2 } from "lucide-react";
-import wishlist from "../assets/wishlist.jpg";
+import { FiTrash2, FiArrowUpRight } from "react-icons/fi";
+import { products, formatPrice } from "../data/products";
+import Reveal from "../Components/Reveal";
 
 export default function WishlistPage() {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  // Seed with a couple of real catalogue items.
+  const [items, setItems] = useState(() => [products[2], products[3], products[7]]);
 
-  const wishlistItems = [
-    {
-      id: 1,
-      name: "Classic Red Socks",
-      price: "₹299",
-      image: "/images/sock1.png",
-    },
-    {
-      id: 2,
-      name: "Bold Stripe Socks",
-      price: "₹349",
-      image: "/images/sock2.png",
-    },
-  ];
+  const remove = (id) => setItems((list) => list.filter((p) => p.id !== id));
 
   return (
-    <section className="min-h-screen w-full bg-[#f5f5dc] text-black relative overflow-hidden p-4 md:p-8 flex flex-col items-center justify-center">
+    <main className="min-h-screen bg-canvas pt-28 md:pt-32">
+      <div className="container-x py-10">
+        <Reveal className="mb-12 border-b border-ink/10 pb-8">
+          <p className="mb-2 font-grotesk text-[11px] uppercase tracking-[0.3em] text-ember">Saved for later</p>
+          <h1 className="text-display text-5xl text-ink md:text-7xl">Your wishlist</h1>
+        </Reveal>
 
-      {/* Rotated Static Background */}
-      <img
-        src={wishlist}
-        alt="Oversocs Background"
-        className="absolute top-1/2 left-1/2 w-[150vh] h-auto -translate-x-1/2 -translate-y-1/2 rotate-90 z-0 opacity-40"
-      />
-
-     
-
-      {/* Animated Content Wrapper */}
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="relative z-10 max-w-6xl mx-auto w-full text-center"
-      >
-        <h1 className="text-[clamp(2rem,5vw,4rem)] font-anton uppercase font-extrabold text-black mb-10">
-          Your Wishlist
-        </h1>
-
-        {wishlistItems.length === 0 ? (
-          <p className="text-lg">
-            Your wishlist is empty.{" "}
-            <Link to="/shop" className="underline text-red-600">
-              Browse products
-            </Link>
-            .
-          </p>
+        {items.length === 0 ? (
+          <div className="flex min-h-[40vh] flex-col items-center justify-center text-center">
+            <p className="text-display text-3xl text-ink">Nothing saved yet.</p>
+            <Link to="/shop" className="btn btn-solid mt-6">Browse the catalogue</Link>
+          </div>
         ) : (
-          <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
-            {wishlistItems.map((item) => (
-              <motion.div
-                key={item.id}
-                whileHover={{ scale: 1.05 }}
-                className="border border-black rounded-2xl overflow-hidden shadow-xl bg-[#f5f5dc]"
-              >
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-full h-60 object-contain p-4 bg-black"
-                />
-                <div className="p-4 flex flex-col gap-2">
-                  <h2 className="uppercase font-semibold text-xl">{item.name}</h2>
-                  <p className="text-lg font-bold">{item.price}</p>
-                  <div className="flex gap-4 mt-2">
-                    <button className="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-2xl hover:bg-red-600 transition">
-                      <Trash2 size={16} /> Remove
-                    </button>
-                    <Link
-                      to={`/product/${item.id}`}
-                      className="flex items-center gap-2 border border-black px-4 py-2 rounded-2xl hover:bg-black hover:text-white transition"
-                    >
-                      <Heart size={16} /> View
-                    </Link>
-                  </div>
+          <div className="grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-3 lg:grid-cols-4">
+            {items.map((item) => (
+              <div key={item.id} className="group">
+                <div className="relative aspect-[4/5] overflow-hidden bg-canvas-deep">
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <button
+                    onClick={() => remove(item.id)}
+                    aria-label="Remove"
+                    className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-cream/90 text-ink backdrop-blur transition-colors hover:bg-ember hover:text-cream"
+                  >
+                    <FiTrash2 className="text-sm" />
+                  </button>
                 </div>
-              </motion.div>
+                <div className="mt-4 flex items-start justify-between">
+                  <div>
+                    <h3 className="font-grotesk text-sm font-medium uppercase text-ink">{item.name}</h3>
+                    <p className="mt-1 font-grotesk text-sm text-ink-soft">{formatPrice(item.price)}</p>
+                  </div>
+                  <Link to={`/product/${item.id}`} aria-label="View" className="mt-1 text-ink hover:text-ember">
+                    <FiArrowUpRight className="text-lg" />
+                  </Link>
+                </div>
+              </div>
             ))}
-          </motion.div>
+          </div>
         )}
-      </motion.div>
-    </section>
+      </div>
+    </main>
   );
 }

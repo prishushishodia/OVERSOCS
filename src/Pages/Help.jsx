@@ -1,84 +1,52 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-import wishlist from "../assets/wishlist.jpg";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { Link } from "react-router-dom";
+import { FiChevronDown } from "react-icons/fi";
+import Reveal from "../Components/Reveal";
+
+const faqs = [
+  { q: "What is the delivery time?", a: "Orders are dispatched within 24 hours and delivered in 2–5 business days across India." },
+  { q: "How can I track my order?", a: "Head to Track Order in the footer, or visit /track-order and enter your order number." },
+  { q: "What is your return & exchange policy?", a: "Return or exchange unworn pairs within 7 days of delivery for a full refund or free size swap." },
+  { q: "Do you ship internationally?", a: "Yes — we ship worldwide with lightning-fast dispatch. Duties may apply at checkout." },
+  { q: "How do I find my size?", a: "Each product page has a size guide. When in doubt, size down — our cuffs have generous stretch." },
+  { q: "How can I contact support?", a: "Email help@oversocks.com and our team will reply within one business day." },
+];
 
 export default function HelpPage() {
-  const [openIndex, setOpenIndex] = useState(null);
-
-  const faqs = [
-    {
-      question: "What is the delivery time?",
-      answer: "We usually deliver within 5-7 business days across India.",
-    },
-    {
-      question: "How can I track my order?",
-      answer: "Use the 'Track Your Order' option in the navigation or visit /track-order.",
-    },
-    {
-      question: "What is your return & exchange policy?",
-      answer: "You can return or exchange socks within 15 days if unworn and in original condition.",
-    },
-    {
-      question: "Do you ship internationally?",
-      answer: "Currently, we only ship within India.",
-    },
-    {
-      question: "How can I contact customer support?",
-      answer: "Visit our 'Customer Care' page or email support@oversocs.com.",
-    },
-  ];
+  const [open, setOpen] = useState(0);
 
   return (
-    <div className="min-h-screen bg-[#f5f5dc] text-black flex flex-col items-center justify-center px-4 relative overflow-hidden">
+    <main className="min-h-screen bg-canvas pt-28 md:pt-32">
+      <div className="container-x py-10">
+        <Reveal className="mb-12 border-b border-ink/10 pb-8">
+          <p className="mb-2 font-grotesk text-[11px] uppercase tracking-[0.3em] text-ember">We've got you</p>
+          <h1 className="text-display text-5xl text-ink md:text-7xl">Help & FAQs</h1>
+        </Reveal>
 
-      {/* Background Image Rotated */}
-      <img
-        src={wishlist}
-        alt="Oversocs Background"
-        className="absolute top-1/2 left-1/2 w-[150vh] h-auto -translate-x-1/2 -translate-y-1/2 rotate-90 z-0 opacity-40 pointer-events-none"
-      />
+        <div className="mx-auto max-w-3xl">
+          {faqs.map((faq, i) => (
+            <div key={i} className="border-b border-ink/15">
+              <button
+                onClick={() => setOpen(open === i ? -1 : i)}
+                className="flex w-full items-center justify-between gap-4 py-6 text-left"
+              >
+                <span className="font-grotesk text-lg uppercase tracking-wide text-ink">{faq.q}</span>
+                <FiChevronDown className={`shrink-0 text-xl text-ember transition-transform ${open === i ? "rotate-180" : ""}`} />
+              </button>
+              {open === i && (
+                <p className="pb-6 font-archivo text-base leading-relaxed text-ink-soft">{faq.a}</p>
+              )}
+            </div>
+          ))}
 
-      {/* Animated Heading */}
-      <motion.h1
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="text-[clamp(2rem,5vw,4rem)] font-anton font-extrabold uppercase tracking-wide mt-32 mb-10 z-10"
-      >
-        Help & FAQs
-      </motion.h1>
-
-      {/* FAQ Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.4 }}
-        className="w-full max-w-2xl z-10 space-y-4"
-      >
-        {faqs.map((faq, index) => (
-         <div
-  key={index}
-  className="bg-[#f5f5dc] border border-black rounded-2xl shadow hover:shadow-red-500/50 transition-transform overflow-hidden"
->
-  <button
-    onClick={() => setOpenIndex(openIndex === index ? null : index)}
-    className="flex justify-between items-center w-full px-4 py-3 text-left font-bold uppercase text-lg transition 
-      hover:bg-black hover:text-[#f5f5dc]"
-  >
-    {faq.question}
-    {openIndex === index ? <ChevronUp /> : <ChevronDown />}
-  </button>
-
-  {openIndex === index && (
-    <div className="px-4 py-2 text-black/80 border-t border-black">
-      {faq.answer}
-    </div>
-  )}
-</div>
-
-        ))}
-      </motion.div>
-    </div>
+          <div className="mt-12 flex flex-col items-center gap-4 border border-ink/15 bg-canvas-deep p-10 text-center">
+            <h2 className="text-display text-3xl text-ink">Still stuck?</h2>
+            <p className="max-w-md font-archivo text-ink-soft">Our team replies within a business day. We're happy to help with sizing, orders or anything else.</p>
+            <a href="mailto:help@oversocks.com" className="btn btn-solid mt-2">Email support</a>
+            <Link to="/track-order" className="font-grotesk text-xs uppercase tracking-[0.18em] text-ink link-underline">Track an order instead</Link>
+          </div>
+        </div>
+      </div>
+    </main>
   );
 }

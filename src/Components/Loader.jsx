@@ -1,86 +1,75 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useLoading } from "../context/LoadingProvider";
-import Marquee from "react-fast-marquee";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { useGLTF, Environment } from "@react-three/drei";
+import Marquee from "./Marquee";
 
-// 3D Model Component
-const Model = () => {
-  const { scene } = useGLTF("/models/oversocks.glb");
-  const modelRef = useRef();
-
-  useEffect(() => {
-    if (scene) {
-      scene.traverse((child) => {
-        if (child.isMesh && child.material) {
-          child.material.roughness = 0.01;     // Adjust roughness (0 = shiny, 1 = matte)
-          child.material.metalness = 5;   
-           child.material.color.set("#000000");  // Adjust metallic look (0 = plastic, 1 = metal)
-        }
-      });
-    }
-  }, [scene]);
-
-  useFrame(() => {
-    if (modelRef.current) {
-      modelRef.current.rotation.y += 0.00;
-    }
-  });
-
-  return <primitive object={scene} ref={modelRef} scale={[6, 6, 6]} />;
-};
-
-
-// Loader UI
+/**
+ * Brand intro loader — purely typographic so it paints instantly and keeps
+ * heavy 3D / vendor code off the critical path. Reveals the site with a
+ * vertical clip-path wipe once loading completes.
+ */
 const Loading = ({ percent }) => {
   const { setIsLoading } = useLoading();
-  const [loaded, setLoaded] = useState(false);
   const [expand, setExpand] = useState(false);
 
   useEffect(() => {
     if (percent >= 100) {
-      setTimeout(() => {
-        setLoaded(true);
-        setTimeout(() => {
-          setExpand(true);
-          setTimeout(() => {
-            setIsLoading(false);
-          }, 1000);
-        }, 1000);
-      }, 600);
+      const t1 = setTimeout(() => {
+        setExpand(true);
+        const t2 = setTimeout(() => setIsLoading(false), 850);
+        return () => clearTimeout(t2);
+      }, 450);
+      return () => clearTimeout(t1);
     }
   }, [percent, setIsLoading]);
 
+  const shown = Math.min(100, Math.round(percent));
+
   return (
     <div
-      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden transition-all duration-[1200ms] ${
-        expand ? "bg-red-400 scale-[10] opacity-0" : "bg-red-500"
+      className={`fixed inset-0 z-[9999] flex flex-col overflow-hidden bg-ink transition-[clip-path,opacity] duration-[850ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        expand ? "opacity-0 [clip-path:inset(0_0_100%_0)]" : "opacity-100 [clip-path:inset(0_0_0_0)]"
       }`}
     >
-      {/* Oversocks Marquee */}
-      <div className="w-full font-anton py-2 mt-12">
-        <Marquee speed={50}>
-          {Array(7)
-            .fill(0)
-            .map((_, i) => (
-              <span
-                key={i}
-                className="mx-16 uppercase font-anton text-5xl tracking-widest text-black opacity-20"
-              >
-                OVERSOCKS
-              </span>
-            ))}
+      {/* Top kinetic band */}
+      <div className="mt-16 border-y border-cream/10 py-4">
+        <Marquee speed={16}>
+          {Array.from({ length: 6 }).map((_, i) => (
+            <span key={i} className="text-display mx-8 text-5xl text-cream/10 md:text-7xl">
+              OVERSOCKS <span className="text-ember/40">✱</span>
+            </span>
+          ))}
         </Marquee>
       </div>
 
-      {/* 3D Model Display */}
-      <div className="relative w-[800px] h-[300px] mt-12">
-        <Canvas camera={{ position: [0, 0, 6] }}>
-          <ambientLight intensity={0.6} />
-          <directionalLight position={[2, 2, 5]} />
-          <Environment preset="studio" />
-          <Model />
-        </Canvas>
+      {/* Center wordmark */}
+      <div className="flex flex-1 flex-col items-center justify-center px-6">
+        <div className="relative">
+          <h1 className="text-display text-center text-[22vw] leading-[0.8] text-cream md:text-[16rem]">
+            STEP
+          </h1>
+          {/* Ember fill that rises with progress */}
+          <div
+            className="text-display pointer-events-none absolute inset-0 overflow-hidden text-center text-[22vw] leading-[0.8] text-ember md:text-[16rem]"
+            style={{ clipPath: `inset(${100 - shown}% 0 0 0)` }}
+          >
+            STEP
+          </div>
+        </div>
+        <p className="mt-2 text-display text-3xl text-cream/30 md:text-5xl">BOLDLY</p>
+      </div>
+
+      {/* Progress rail */}
+      <div className="container-x w-full pb-10">
+        <div className="flex items-end justify-between font-grotesk text-xs uppercase tracking-[0.25em] text-cream/50">
+          <span>Lacing up</span>
+          <span className="text-display text-5xl leading-none text-cream md:text-6xl">
+            {shown.toString().padStart(3, "0")}
+            <span className="text-ember">%</span>
+          </span>
+        </div>
+        <div className="mt-4 h-[3px] w-full bg-cream/15">
+          <div className="h-full bg-ember transition-[width] duration-300 ease-out" style={{ width: `${shown}%` }} />
+        </div>
       </div>
     </div>
   );
@@ -88,7 +77,7 @@ const Loading = ({ percent }) => {
 
 export default Loading;
 
-// 🚀 Export setProgress for loader logic
+// Progress driver — eases to ~90% on a timer, then `loaded()` finishes the run.
 export const setProgress = (setLoading) => {
   let percent = 0;
   let interval = setInterval(() => {

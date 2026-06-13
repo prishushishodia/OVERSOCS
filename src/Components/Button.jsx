@@ -1,9 +1,16 @@
-export default function Button({ children, variant = "primary", ...props }) {
-  const base = "uppercase font-bold rounded transition duration-200";
-  const styles = {
-    primary: "bg-brand text-white px-6 py-3 hover:bg-red-700",
-    outline: "border border-brand text-brand px-6 py-3 hover:bg-brand hover:text-white",
+/**
+ * Button — thin wrapper over the .btn design-system classes so JSX can
+ * pick a variant by name. Use a plain <Link className="btn btn-solid">
+ * for navigation; this is for actual <button> actions.
+ */
+export default function Button({ children, variant = "solid", className = "", ...props }) {
+  const variants = {
+    solid: "btn btn-solid",
+    outline: "btn btn-outline",
   };
-
-  return <button className={`${base} ${styles[variant]}`} {...props}>{children}</button>;
+  return (
+    <button className={`${variants[variant] ?? variants.solid} ${className}`} {...props}>
+      {children}
+    </button>
+  );
 }

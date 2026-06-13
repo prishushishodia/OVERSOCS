@@ -1,76 +1,53 @@
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
+import { Link } from "react-router-dom";
+import { FiArrowUpRight } from "react-icons/fi";
 
-import woman from "../assets/a.jpg";
-import man from "../assets/a.jpg";
-import kid from "../assets/c.jpg";
+const tiles = [
+  { num: "01", label: "Men", to: "/shop?category=men", img: "/images/MAN.jpg" },
+  { num: "02", label: "Women", to: "/shop?category=women", img: "/images/WOMAN.jpg" },
+  { num: "03", label: "Kids", to: "/shop?category=kids", img: "/images/KIDS.jpg" },
+];
 
 export default function CategorySection() {
-  const sectionRef = useRef(null);
-
-  useEffect(() => {
-    const columns = sectionRef.current.querySelectorAll(".category-tile");
-    gsap.fromTo(
-      columns,
-      { opacity: 0, y: 50 },
-      {
-        opacity: 1,
-        y: 0,
-        stagger: 0.2,
-        duration: 1,
-        ease: "power3.out",
-      }
-    );
-  }, []);
-
   return (
-    <section ref={sectionRef} className="relative w-full h-screen font-Montserrat font-thin flex overflow-hidden">
-      {/* MEN */}
-      <div className="category-tile w-1/3 h-full relative group overflow-hidden cursor-pointer z-20">
-
-        <img
-          src={man}
-          alt="Shop Men"
-          className="w-full  border-red-400 h-full object-cover scale-100 group-hover:scale-110 transition-transform duration-500"
-        />
-        <div className="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-30 transition duration-300"></div>
-        <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center">
-          <h2 className="text-3xl md:text-4xl font-Montserrat uppercase mb-4">Shop Men</h2>
-          <button className="px-6 py-2 bg-white text-black hover:bg-black hover:text-white transition uppercase tracking-wide">
-            Explore
-          </button>
+    <section className="bg-ink py-24 md:py-32">
+      <div className="container-x">
+        <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
+          <h2 className="text-display text-5xl text-cream md:text-7xl">
+            Shop by <span className="text-ember">wear</span>
+          </h2>
+          <p className="max-w-xs font-archivo text-sm text-cream/60">
+            Three cuts, one attitude. Find the pair built for how you move.
+          </p>
         </div>
-      </div>
 
-      {/* WOMEN */}
-      <div className="category-tile w-1/3 h-full relative group overflow-hidden cursor-pointer">
-        <img
-          src={woman}
-          alt="Shop Womens"
-          className="w-full h-full object-cover scale-100 group-hover:scale-110 transition-transform duration-500"
-        />
-        <div className="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-30 transition duration-300"></div>
-        <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center">
-          <h2 className="text-3xl md:text-4xl font-Montserrat uppercase mb-4">Shop Women</h2>
-          <button className="px-6 py-2 bg-white text-black hover:bg-black hover:text-white transition uppercase tracking-wide">
-            Explore
-          </button>
-        </div>
-      </div>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          {tiles.map((tile) => (
+            <Link
+              key={tile.label}
+              to={tile.to}
+              className="group relative aspect-[3/4] overflow-hidden md:aspect-auto md:h-[68vh]"
+            >
+              <img
+                src={tile.img}
+                alt={`Shop ${tile.label}`}
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-cover sepia transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105 group-hover:sepia-0"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/10 to-transparent" />
 
-      {/* KIDS */}
-      <div className="category-tile w-1/3 h-full relative group overflow-hidden cursor-pointer">
-        <img
-          src={kid}
-          alt="Shop Kids"
-          className="w-full h-full object-cover scale-100 group-hover:scale-110 transition-transform duration-500"
-        />
-        <div className="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-30 transition duration-300"></div>
-        <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center">
-          <h2 className="text-3xl md:text-4xl font-Montserrat uppercase mb-4">Shop Kids</h2>
-          <button className="px-6 py-2 bg-white text-black hover:bg-black hover:text-white transition uppercase tracking-wide">
-            Explore
-          </button>
+              <span className="absolute left-5 top-5 font-grotesk text-xs tracking-[0.3em] text-cream/70">
+                {tile.num}
+              </span>
+
+              <div className="absolute inset-x-5 bottom-5 flex items-end justify-between">
+                <h3 className="text-display text-5xl text-cream md:text-6xl">{tile.label}</h3>
+                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-cream text-ink transition-colors duration-300 group-hover:bg-ember group-hover:text-cream">
+                  <FiArrowUpRight className="text-xl" />
+                </span>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </section>

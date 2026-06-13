@@ -1,80 +1,63 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { PackageCheck, Truck, CheckCircle, ArrowLeftCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import wishlist from "../assets/wishlist.jpg";
+import { FiPackage, FiTruck, FiCheckCircle, FiArrowLeft } from "react-icons/fi";
+import Reveal from "../Components/Reveal";
+
+const steps = [
+  { label: "Order Placed", icon: FiPackage, date: "Jun 10" },
+  { label: "Shipped", icon: FiTruck, date: "Jun 11" },
+  { label: "Delivered", icon: FiCheckCircle, date: "Est. Jun 14" },
+];
 
 export default function TrackOrderPage() {
   const navigate = useNavigate();
-
-  // Simulated order status: "Processing", "Shipped", "Delivered"
-  const [status] = useState("Shipped");
-
-  const steps = [
-    { label: "Order Placed", icon: <PackageCheck className="w-6 h-6" /> },
-    { label: "Shipped", icon: <Truck className="w-6 h-6" /> },
-    { label: "Delivered", icon: <CheckCircle className="w-6 h-6" /> },
-  ];
-
-  const getStepClass = (stepIndex) => {
-    const statusOrder = ["Order Placed", "Shipped", "Delivered"];
-    const currentIndex = statusOrder.indexOf(status);
-    if (stepIndex < currentIndex) return "bg-black text-[#F5F5DC]";
-    if (stepIndex === currentIndex) return "bg-red-600 text-[#F5F5DC]";
-    return "bg-[#F5F5DC] text-black border border-black";
-  };
+  const [current] = useState(1); // index of the active step
 
   return (
-    <div className="min-h-screen bg-[#F5F5DC] text-black flex flex-col items-center justify-center px-4 relative overflow-hidden">
+    <main className="min-h-screen bg-canvas pt-28 md:pt-32">
+      <div className="container-x py-10">
+        <Reveal className="mb-12 border-b border-ink/10 pb-8">
+          <p className="mb-2 font-grotesk text-[11px] uppercase tracking-[0.3em] text-ember">Where's my drop?</p>
+          <h1 className="text-display text-5xl text-ink md:text-7xl">Track your order</h1>
+        </Reveal>
 
-      {/* Background Image */}
-      <img
-        src={wishlist}
-        alt="Oversocs Background"
-        className="absolute top-1/2 left-1/2 w-[150vh] h-auto -translate-x-1/2 -translate-y-1/2 rotate-90 z-0 opacity-30 pointer-events-none"
-      />
+        <Reveal className="mx-auto max-w-3xl border border-ink/15 bg-canvas-deep p-8 md:p-12">
+          <div className="mb-10 flex flex-wrap items-center justify-between gap-2 font-grotesk text-sm">
+            <span className="text-ink-soft">Order <span className="text-ink">#OS-24819</span></span>
+            <span className="bg-ember px-3 py-1 text-xs uppercase tracking-wide text-cream">In transit</span>
+          </div>
 
-      {/* Heading */}
-      <motion.h1
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="text-[clamp(2rem,5vw,4rem)] font-anton font-extrabold uppercase tracking-wide mt-32 mb-10 z-10 text-center"
-      >
-        Track Your Order
-      </motion.h1>
+          {/* Stepper */}
+          <div className="relative flex justify-between">
+            <div className="absolute left-0 right-0 top-7 h-[2px] bg-ink/15" />
+            <div
+              className="absolute left-0 top-7 h-[2px] bg-ember transition-all duration-700"
+              style={{ width: `${(current / (steps.length - 1)) * 100}%` }}
+            />
+            {steps.map((step, i) => {
+              const Icon = step.icon;
+              const done = i <= current;
+              return (
+                <div key={step.label} className="relative z-10 flex flex-1 flex-col items-center">
+                  <div
+                    className={`flex h-14 w-14 items-center justify-center rounded-full border-2 transition-colors ${
+                      done ? "border-ember bg-ember text-cream" : "border-ink/20 bg-canvas text-ink-soft"
+                    }`}
+                  >
+                    <Icon className="text-xl" />
+                  </div>
+                  <span className="mt-3 text-center font-grotesk text-xs uppercase tracking-wide text-ink">{step.label}</span>
+                  <span className="font-grotesk text-[11px] text-ink-soft">{step.date}</span>
+                </div>
+              );
+            })}
+          </div>
 
-      {/* Order Tracker */}
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="w-full max-w-2xl p-6 bg-[#F5F5DC] border border-black rounded-3xl shadow-xl z-10 text-center space-y-10"
-      >
-        <p className="text-lg mb-6">Your current order status: <span className="font-bold">{status}</span></p>
-
-        <div className="flex justify-between items-center">
-          {steps.map((step, i) => (
-            <div key={i} className="flex flex-col items-center flex-1">
-              <div className={`w-12 h-12 flex items-center justify-center rounded-full mb-2 ${getStepClass(i)}`}>
-                {step.icon}
-              </div>
-              <span className="text-sm font-semibold">{step.label}</span>
-              {i < steps.length - 1 && (
-                <div className="w-full h-1 bg-black mt-2"></div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        <button
-          onClick={() => navigate("/shop")}
-          className="mt-6 bg-black text-[#F5F5DC] px-6 py-3 rounded-xl uppercase tracking-wide hover:bg-red-600 hover:text-white transition flex items-center justify-center gap-2 mx-auto"
-        >
-          <ArrowLeftCircle className="w-5 h-5" />
-          Back to Shop
-        </button>
-      </motion.div>
-    </div>
+          <button onClick={() => navigate("/shop")} className="btn btn-outline mx-auto mt-12 flex">
+            <FiArrowLeft /> Back to shop
+          </button>
+        </Reveal>
+      </div>
+    </main>
   );
 }

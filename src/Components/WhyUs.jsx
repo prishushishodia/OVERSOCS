@@ -50,10 +50,10 @@ function VelocityScroller({ text, direction = 1, velocity = 80, textSize = "text
   });
 
   return (
-    <div className="overflow-hidden w-full h-[100px] relative">
+    <div className="relative h-[100px] w-full overflow-hidden">
       <motion.div
         style={{ x }}
-        className={`flex whitespace-nowrap ${textSize} font-extrabold uppercase tracking-[0.2em] text-black opacity-20 select-none`}
+        className={`text-display flex whitespace-nowrap ${textSize} select-none uppercase tracking-[0.1em] text-ink/[0.07]`}
       >
         <span ref={ref} className="mx-8">{text}</span>
         <span className="mx-8">{text}</span>
@@ -64,20 +64,20 @@ function VelocityScroller({ text, direction = 1, velocity = 80, textSize = "text
   );
 }
 
-function ShinyModel({ scale = 5 }) {
+function ShinyModel() {
   const { scene } = useGLTF("/models/redsocks.glb");
   const modelRef = useRef();
 
-  useFrame(() => {
-    if (modelRef.current) modelRef.current.rotation.y += 0.025;
+  useFrame((_, delta) => {
+    if (modelRef.current) modelRef.current.rotation.y += delta * 0.6;
   });
 
   scene.traverse((child) => {
     if (child.isMesh) {
       child.material = new THREE.MeshStandardMaterial({
-        color: "#000000",
-        roughness: 0.01,
-        metalness: 10,
+        color: "#2c1f14",
+        roughness: 0.25,
+        metalness: 0.7,
       });
     }
   });
@@ -85,55 +85,60 @@ function ShinyModel({ scale = 5 }) {
   return <primitive object={scene} ref={modelRef} scale={1.3} />;
 }
 
+const pillars = [
+  {
+    title: "Uncompromising Quality",
+    desc: "Every pair is crafted from premium combed cotton with reinforced heels and hand-linked toes — durability you feel from day one.",
+  },
+  {
+    title: "Statement Style",
+    desc: "From sleek minimal essentials to loud, unapologetic colourways, our designs are made to turn heads on purpose.",
+  },
+  {
+    title: "All-Day Comfort",
+    desc: "Breathable, engineered knit zones and cushioned footbeds deliver lasting comfort with zero slouch.",
+  },
+  {
+    title: "Global Delivery",
+    desc: "Lightning-fast dispatch and worldwide shipping — your next bold pair is only days away.",
+  },
+];
+
 export default function AboutUs() {
   return (
-    <section id="about" className="relative py-80 px-4 text-black z-10 bg-white overflow-hidden">
-
-
-
-      <div className="absolute top-12 left-0 w-full text-black z-0 space-y-4">
-        <VelocityScroller text="OVERSOCKS" direction={1} velocity={80} textSize="text-[50px] md:text-[80px]" />
-<VelocityScroller text="OVERSOCKS" direction={-1} velocity={80} textSize="text-[50px] md:text-[80px]" />
-
+    <section id="about" className="relative overflow-hidden bg-canvas px-4 py-32 text-ink md:py-40">
+      {/* Kinetic background type */}
+      <div className="pointer-events-none absolute inset-x-0 top-16 z-0 space-y-2">
+        <VelocityScroller text="OVERSOCKS ✱ OVERSOCKS" direction={1} velocity={70} textSize="text-[60px] md:text-[110px]" />
+        <VelocityScroller text="STEP BOLDLY ✱ STEP BOLDLY" direction={-1} velocity={70} textSize="text-[60px] md:text-[110px]" />
       </div>
 
-      <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none opacity-70">
+      {/* Floating 3D sock */}
+      <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-80">
         <Canvas camera={{ position: [0, 0, 2.5] }}>
-          <ambientLight intensity={0.1} />
-          <directionalLight position={[3, 2, 2]} />
+          <ambientLight intensity={0.25} />
+          <directionalLight position={[3, 2, 2]} intensity={1.4} />
           <Environment preset="warehouse" />
-          <ShinyModel scale={1.35} />
+          <ShinyModel />
         </Canvas>
       </div>
 
-      <div className="space-y-20 relative z-10 max-w-5xl mx-auto text-center">
-        <ScrollFloat containerClassName="text-5xl text-red-500 md:text-7xl font-Montserrat  uppercase">
+      <div className="relative z-10 mx-auto max-w-5xl space-y-20 text-center">
+        <ScrollFloat containerClassName="text-display text-5xl text-ember md:text-7xl">
           About OVERSOCKS
         </ScrollFloat>
 
-        <ScrollFloat textClassName="text-black leading-relaxed text-lg md:text-xl max-w-3xl mx-auto">
-          Oversocks was born from a simple belief — your socks should work as hard as you do, while making a bold statement We merge premium craftsmanship with fearless design, built for those who refuse to blend in.
+        <ScrollFloat textClassName="font-archivo text-lg leading-relaxed text-ink md:text-xl max-w-3xl mx-auto block">
+          Oversocks was born from a simple belief — your socks should work as hard as you do while making a bold statement. We merge premium craftsmanship with fearless design, built for those who refuse to blend in.
         </ScrollFloat>
 
-        <div className="grid md:grid-cols-2 gap-12 pt-10">
-          {[{
-            title: "Uncompromising Quality",
-            desc: "Every pair is crafted from premium materials, combining durability, comfort, and fearless design for those who refuse to blend in."
-          }, {
-            title: "Statement-Making Style",
-            desc: "Our bold designs are crafted to turn heads — from sleek minimal essentials to loud, unapologetic looks."
-          }, {
-            title: "All-Day Comfort",
-            desc: "Breathable, engineered fabrics that deliver lasting comfort — no compromises, no shortcuts, just relentless performance."
-          }, {
-            title: "Global Delivery",
-            desc: "Oversocks ships worldwide with lightning-fast dispatch — your next bold look is only days away."
-          }].map(({ title, desc }) => (
-            <div key={title} className="space-y-6 group">
-              <ScrollFloat containerClassName="text-4xl md:text-5xl font-Montserrat font-thin uppercase  text-black group-hover:text-red-500 transition-all">
+        <div className="grid gap-12 pt-10 text-left md:grid-cols-2">
+          {pillars.map(({ title, desc }) => (
+            <div key={title} className="group space-y-4 border-t border-ink/15 pt-6">
+              <ScrollFloat containerClassName="text-display text-3xl md:text-4xl text-ink group-hover:text-ember transition-colors">
                 {title}
               </ScrollFloat>
-              <ScrollFloat textClassName="text-black leading-relaxed text-lg md:text-xl ">
+              <ScrollFloat textClassName="font-archivo text-base leading-relaxed text-ink-soft md:text-lg block">
                 {desc}
               </ScrollFloat>
             </div>

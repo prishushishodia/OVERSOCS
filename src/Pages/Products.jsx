@@ -1,235 +1,166 @@
-import { useState, useEffect, useRef } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { useSearchParams, Link } from "react-router-dom";
+import { FiX, FiSliders } from "react-icons/fi";
+import { products, filterGroups } from "../data/products";
 import ProductCard from "../Components/ProductCard";
-import wishlist from "../assets/wishlist.jpg";
-import { motion } from "framer-motion";
+import Reveal, { RevealItem } from "../Components/Reveal";
+
+const tagLabels = { new: "New", limited: "Limited" };
 
 export default function Products() {
-  const { filter } = useParams();
-  const navigate = useNavigate();
+  const [params, setParams] = useSearchParams();
+  const [sort, setSort] = useState("featured");
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
-  const allProducts = [
-    { id: 1, name: "Classic Red Socks", price: "₹299", image: "/assets/socks1.png" },
-    { id: 2, name: "Bold Stripe Socks", price: "₹349", image: "/assets/socks2.png" },
-    { id: 3, name: "Comfy Cotton Socks", price: "₹249", image: "/assets/socks3.png" },
-    { id: 4, name: "Streetwear Black Socks", price: "₹399", image: "/assets/socks4.png" },
-    { id: 5, name: "Cozy Winter Socks", price: "₹299", image: "/assets/socks5.png" },
-    { id: 7, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-    { id: 8, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-    { id: 9, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-    { id: 10, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-    { id: 11, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-    { id: 12, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-    { id: 1, name: "Classic Red Socks", price: "₹299", image: "/assets/socks1.png" },
-    { id: 2, name: "Bold Stripe Socks", price: "₹349", image: "/assets/socks2.png" },
-    { id: 3, name: "Comfy Cotton Socks", price: "₹249", image: "/assets/socks3.png" },
-    { id: 4, name: "Streetwear Black Socks", price: "₹399", image: "/assets/socks4.png" },
-    { id: 5, name: "Cozy Winter Socks", price: "₹299", image: "/assets/socks5.png" },
-    { id: 7, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-    { id: 8, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-    { id: 9, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-    { id: 10, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-    { id: 11, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-    { id: 12, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-    { id: 1, name: "Classic Red Socks", price: "₹299", image: "/assets/socks1.png" },
-    { id: 2, name: "Bold Stripe Socks", price: "₹349", image: "/assets/socks2.png" },
-    { id: 3, name: "Comfy Cotton Socks", price: "₹249", image: "/assets/socks3.png" },
-    { id: 4, name: "Streetwear Black Socks", price: "₹399", image: "/assets/socks4.png" },
-    { id: 5, name: "Cozy Winter Socks", price: "₹299", image: "/assets/socks5.png" },
-    { id: 7, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-    { id: 8, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-    { id: 9, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-    { id: 10, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-    { id: 11, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-    { id: 12, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-    { id: 1, name: "Classic Red Socks", price: "₹299", image: "/assets/socks1.png" },
-    { id: 2, name: "Bold Stripe Socks", price: "₹349", image: "/assets/socks2.png" },
-    { id: 3, name: "Comfy Cotton Socks", price: "₹249", image: "/assets/socks3.png" },
-    { id: 4, name: "Streetwear Black Socks", price: "₹399", image: "/assets/socks4.png" },
-    { id: 5, name: "Cozy Winter Socks", price: "₹299", image: "/assets/socks5.png" },
-    { id: 7, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-    { id: 8, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-    { id: 9, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-    { id: 10, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-    { id: 11, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-    { id: 12, name: "Retro Neon Socks", price: "₹279", image: "/assets/socks6.png" },
-  ];
+  const activeTag = params.get("tag");
 
-  const [expanded, setExpanded] = useState(null);
-  const [isSticky, setIsSticky] = useState(true);
-  const footerRef = useRef(null);
-  const sidebarRef = useRef(null);
-
-  useEffect(() => {
-   const observer = new IntersectionObserver(
-  ([entry]) => {
-    if (entry.isIntersecting) {
-      setIsSticky(false); // Footer visible, sidebar scrolls naturally
-    } else {
-      setIsSticky(true); // Sidebar stays fixed at top
+  // Build the active filter set from the URL.
+  const filtered = useMemo(() => {
+    let list = products.filter((p) =>
+      filterGroups.every((group) => {
+        const val = params.get(group.key);
+        return !val || p[group.key] === val;
+      })
+    );
+    if (activeTag && tagLabels[activeTag]) {
+      list = list.filter((p) => p.tag === tagLabels[activeTag]);
     }
-  },
-  { root: null, threshold: 0 }
-);
+    if (sort === "low") list = [...list].sort((a, b) => a.price - b.price);
+    if (sort === "high") list = [...list].sort((a, b) => b.price - a.price);
+    return list;
+  }, [params, activeTag, sort]);
 
+  const setFilter = (key, value) => {
+    const next = new URLSearchParams(params);
+    if (next.get(key) === value) next.delete(key);
+    else next.set(key, value);
+    setParams(next);
+  };
 
-    if (footerRef.current) {
-      observer.observe(footerRef.current);
-    }
+  const clearAll = () => setParams({});
 
-    return () => {
-      if (footerRef.current) {
-        observer.unobserve(footerRef.current);
-      }
-    };
-  }, []);
+  const activeCount = filterGroups.filter((g) => params.get(g.key)).length + (activeTag ? 1 : 0);
 
-  const categories = [
-    {
-      title: "Socks Length",
-      options: [
-        ["no-show", "No Show"],
-        ["low-cut", "Low Cut"],
-        ["ankle-length", "Ankle Length"],
-        ["full-length", "Full Length"],
-      ],
-    },
-    {
-      title: "Shop by Activity",
-      options: [
-        ["work", "Work (Professional)"],
-        ["sports", "Sports/Gymwear"],
-        ["everyday", "Every Day Wear"],
-      ],
-    },
-    {
-      title: "Shop by Season",
-      options: [
-        ["winter", "Winter Wear"],
-        ["summer", "Summer Wear"],
-        ["allseason", "All Season Favourite"],
-      ],
-    },
-  ];
+  const title = activeTag
+    ? `${tagLabels[activeTag] ?? "New"} In`
+    : params.get("category")
+    ? `${params.get("category")} Socks`
+    : "All Socks";
 
-  const filteredProducts = filter && filter !== "All"
-    ? allProducts.filter(p =>
-        p.name.toLowerCase().includes(filter.toLowerCase())
-      )
-    : allProducts;
+  const Sidebar = (
+    <div className="space-y-8">
+      <div className="flex items-center justify-between">
+        <h3 className="text-display text-2xl text-ink">Filters</h3>
+        {activeCount > 0 && (
+          <button onClick={clearAll} className="font-grotesk text-xs uppercase tracking-wide text-ember hover:underline">
+            Clear ({activeCount})
+          </button>
+        )}
+      </div>
+
+      {filterGroups.map((group) => (
+        <div key={group.key} className="border-t border-ink/10 pt-5">
+          <h4 className="mb-3 font-grotesk text-xs uppercase tracking-[0.2em] text-ink-soft">
+            {group.title}
+          </h4>
+          <div className="flex flex-wrap gap-2">
+            {group.options.map(([value, label]) => {
+              const active = params.get(group.key) === value;
+              return (
+                <button
+                  key={value}
+                  onClick={() => setFilter(group.key, value)}
+                  className={`border px-3 py-1.5 font-grotesk text-xs uppercase tracking-wide transition-colors ${
+                    active
+                      ? "border-ink bg-ink text-cream"
+                      : "border-ink/20 text-ink hover:border-ink"
+                  }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 
   return (
-    <>
-      <main
-        className="min-h-screen pt-28 bg-[#F5F5DC] text-black flex relative overflow-hidden"
-        style={{
-          backgroundImage: `url(${wishlist})`,
-          backgroundRepeat: "repeat",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-<aside
-  ref={sidebarRef}
-  className={`w-64 p-6 border-r border-gray-800 z-20 overflow-y-auto bg-[#F5F5DC] transition-all duration-300 ${
-    isSticky ? "fixed top-0 left-0 h-screen" : "relative top-28 h-[calc(100vh-7rem)]"
-  }`}
->
-
-  <div className="translate-y-30">
-
-  <h3 className="text-3xl  font-anton mb-6">FILTERS</h3>
-
-  {categories.map((cat, i) => (
-    <div key={i} className="mb-6">
-      <button
-        onClick={() => setExpanded(expanded === i ? null : i)}
-        className="w-full text-left flex justify-between items-center font-semibold mb-2"
-      >
-        {cat.title}
-        <span>{expanded === i ? "▲" : "▼"}</span>
-      </button>
-
-      {expanded === i && (
-        <ul className="space-y-2 pl-2">
-          {cat.options.map(([key, label]) => (
-            <li key={key}>
-              <button
-                onClick={() => navigate(`/shop/${key}`)}
-                className={`w-full text-left px-3 py-2 border border-black hover:bg-black hover:text-[#F5F5DC] transition ${
-                  filter === key ? "bg-black text-[#F5F5DC]" : "bg-white text-black"
-                }`}
-              >
-                {label}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  ))}
-
-  <div className="mb-6">
-    <h4 className="font-semibold mb-2">Price</h4>
-    <input type="range" min="100" max="500" className="w-full" />
-  </div>
-
-  <div>
-    <h4 className="font-semibold mb-2">New & Featured</h4>
-    <button
-      onClick={() => navigate("/new-featured")}
-      className="w-full px-3 py-2 border border-black bg-white text-black hover:bg-black hover:text-[#F5F5DC] transition"
-    >
-      Explore Now
-    </button>
-  </div>
-  </div>
-</aside>
-
-
-        {/* Products */}
-        <section className="flex-1 p-8 ml-64 relative z-10">
-          <motion.h2
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-4xl  text-[#F5F5DC]  font-bebas mb-6"
-          >
-            {filter ? `${filter.replace("-", " ")} Collection` : "All Products"}
-          </motion.h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProducts.map((product, index) => (
-              <motion.div
-                key={product.id}
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="border border-black bg-[#F5F5DC] hover:shadow-xl transition overflow-hidden "
-              >
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-64 object-contain p-4 group-hover:scale-105 transition"
-                />
-                <div className="p-4 space-y-2">
-                  <h3 className="text-base font-bold uppercase">{product.name}</h3>
-                  <p className="font-bold text-red-500">{product.price}</p>
-                  <button className="text-sm text-black hover:text-red-500 hover:underline uppercase">
-                    Buy now →
-                  </button>
-                </div>
-              </motion.div>
-            ))}
+    <main className="min-h-screen bg-canvas pt-28 md:pt-32">
+      {/* Page header */}
+      <div className="container-x border-b border-ink/10 pb-8">
+        <p className="mb-2 font-grotesk text-[11px] uppercase tracking-[0.3em] text-ember">
+          The Catalogue
+        </p>
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <h1 className="text-display text-5xl capitalize text-ink md:text-7xl">{title}</h1>
+          <div className="flex items-center gap-4">
+            <span className="font-grotesk text-sm text-ink-soft">{filtered.length} pairs</span>
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
+              className="border border-ink/20 bg-transparent px-3 py-2 font-grotesk text-xs uppercase tracking-wide text-ink focus:outline-none"
+            >
+              <option value="featured">Featured</option>
+              <option value="low">Price: Low → High</option>
+              <option value="high">Price: High → Low</option>
+            </select>
           </div>
-        </section>
-      </main>
+        </div>
+      </div>
 
-      {/* Footer */}
-      <footer ref={footerRef} className="bg-black text-white p-8 text-center">
-        <h4 className="text-lg font-semibold mb-4">OVERSOCKS Footer</h4>
-        <p>All rights reserved. Contact us at support@oversocks.com</p>
-      </footer>
-    </>
+      <div className="container-x flex gap-10 py-10">
+        {/* Desktop sidebar */}
+        <aside className="hidden w-64 shrink-0 lg:block">
+          <div className="sticky top-32">{Sidebar}</div>
+        </aside>
+
+        {/* Grid */}
+        <section className="flex-1">
+          <button
+            onClick={() => setMobileFiltersOpen(true)}
+            className="mb-6 flex items-center gap-2 border border-ink/20 px-4 py-2 font-grotesk text-xs uppercase tracking-wide text-ink lg:hidden"
+          >
+            <FiSliders /> Filters {activeCount > 0 && `(${activeCount})`}
+          </button>
+
+          {filtered.length === 0 ? (
+            <div className="flex min-h-[40vh] flex-col items-center justify-center text-center">
+              <p className="text-display text-3xl text-ink">No pairs match.</p>
+              <button onClick={clearAll} className="btn btn-outline mt-6">
+                Reset filters
+              </button>
+            </div>
+          ) : (
+            <Reveal stagger key={params.toString() + sort} className="grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-3">
+              {filtered.map((product, i) => (
+                <RevealItem key={product.id}>
+                  <ProductCard product={product} index={i} />
+                </RevealItem>
+              ))}
+            </Reveal>
+          )}
+        </section>
+      </div>
+
+      {/* Mobile filter sheet */}
+      {mobileFiltersOpen && (
+        <div className="fixed inset-0 z-[70] lg:hidden">
+          <div className="absolute inset-0 bg-ink/40" onClick={() => setMobileFiltersOpen(false)} />
+          <div className="absolute inset-y-0 left-0 w-80 max-w-[85%] overflow-y-auto bg-canvas p-6">
+            <div className="mb-6 flex justify-end">
+              <button onClick={() => setMobileFiltersOpen(false)} className="text-ink">
+                <FiX className="text-2xl" />
+              </button>
+            </div>
+            {Sidebar}
+            <button onClick={() => setMobileFiltersOpen(false)} className="btn btn-solid mt-8 w-full">
+              Show {filtered.length} pairs
+            </button>
+          </div>
+        </div>
+      )}
+    </main>
   );
 }

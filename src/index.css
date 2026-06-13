@@ -1,12 +1,163 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Michroma&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,100..900;1,100..900&family=Space+Grotesk:wght@300..700&display=swap');
 @import "tailwindcss";
 
-@theme{
-  --font-bebas:Bebas Neue,"sans-serif";
-  --font-anton:Anton,"sans-serif";
-  --font-michroma:Michroma,"sans-serif";
-  --font-Montserrat:Montserrat,"sans-serif";
+/* ------------------------------------------------------------------ *
+ *  OVERSOCKS — Design tokens
+ *  Palette: "Sand & Espresso" — warm beige surfaces, deep espresso
+ *  brown for dark blocks + type, a rich sienna/terracotta signature,
+ *  with a warm ochre accent for the occasional pop.
+ * ------------------------------------------------------------------ */
+@theme {
+  /* Surfaces */
+  --color-canvas: #e9ddc8;       /* warm beige — primary light surface   */
+  --color-canvas-deep: #dccbaf;  /* deeper sand for cards / alt blocks    */
+  --color-cream: #f6efe2;        /* lightest paper                        */
+  --color-ink: #2c1f14;          /* deep espresso — dark blocks + type    */
+  --color-ink-soft: #6c5944;     /* muted coffee for body copy            */
+
+  /* Accents */
+  --color-ember: #9c5a2c;        /* signature sienna / terracotta         */
+  --color-ember-deep: #804622;   /* pressed / hover sienna                */
+  --color-acid: #c79a45;         /* warm ochre — used sparingly           */
+
+  /* Type */
+  --font-display: "Anton", sans-serif;     /* brutalist headline impact */
+  --font-grotesk: "Space Grotesk", sans-serif; /* UI, nav, buttons      */
+  --font-archivo: "Archivo", sans-serif;   /* body & editorial copy     */
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Keyframes exposed as Tailwind animations */
+  --animate-marquee: marquee 28s linear infinite;
+  --animate-marquee-rev: marquee-rev 28s linear infinite;
+  --animate-rise: rise 0.8s var(--ease-out-expo) both;
+  --animate-shimmer: shimmer 2.4s linear infinite;
+}
+
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+@keyframes marquee-rev {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  to { background-position: 200% center; }
+}
+
+/* ------------------------------------------------------------------ *
+ *  Base layer
+ * ------------------------------------------------------------------ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-archivo);
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--color-ember);
+    color: var(--color-cream);
+  }
+
+  /* Branded scrollbar */
+  ::-webkit-scrollbar { width: 11px; }
+  ::-webkit-scrollbar-track { background: var(--color-canvas-deep); }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-ink);
+    border: 3px solid var(--color-canvas-deep);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-ember); }
+
+  h1, h2, h3 { letter-spacing: -0.01em; }
+}
+
+/* ------------------------------------------------------------------ *
+ *  Reusable component utilities
+ * ------------------------------------------------------------------ */
+@layer components {
+  /* Fluid display heading */
+  .text-display {
+    font-family: var(--font-display);
+    line-height: 0.92;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+  }
+
+  /* Outlined / stroke text used for kinetic typography */
+  .text-stroke {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--color-ink);
+  }
+  .text-stroke-cream {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--color-cream);
+  }
+
+  /* Primary button — solid ink that flips to ember */
+  .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-grotesk);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.8rem;
+    padding: 0.95rem 2rem;
+    border: 1.5px solid var(--color-ink);
+    transition: transform 0.35s var(--ease-out-expo),
+      background-color 0.35s var(--ease-out-expo),
+      color 0.35s var(--ease-out-expo);
+    cursor: pointer;
+  }
+  .btn-solid { background: var(--color-ink); color: var(--color-cream); }
+  .btn-solid:hover { background: var(--color-ember); border-color: var(--color-ember); color: var(--color-cream); }
+  .btn-outline { background: transparent; color: var(--color-ink); }
+  .btn-outline:hover { background: var(--color-ink); color: var(--color-cream); }
+  .btn:active { transform: translateY(1px); }
+
+  /* Animated underline link */
+  .link-underline {
+    position: relative;
+  }
+  .link-underline::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: -2px;
+    height: 1.5px; width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s var(--ease-out-expo);
+  }
+  .link-underline:hover::after { transform: scaleX(1); transform-origin: left; }
+
+  /* Edge-bleed container */
+  .container-x { max-width: 90rem; margin-inline: auto; padding-inline: 1.5rem; }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }

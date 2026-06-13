@@ -11,6 +11,7 @@ import WishlistPage from "../Pages/Wishlist";
 import HelpPage from "../Pages/Help";
 import TrackOrderPage from "../Pages/TrackOrder";
 import ReturnExchangePage from "../Pages/ReturnExchange";
+import NotFound from "../Pages/NotFound";
 
 export default function AppRoutes() {
   return (
@@ -42,6 +43,9 @@ export default function AppRoutes() {
         <Route path="/help" element={<HelpPage />} />
         <Route path="/track-order" element={<TrackOrderPage />} />
         <Route path="/returns" element={<ReturnExchangePage />} />
+
+        {/* 404 */}
+        <Route path="*" element={<NotFound />} />
 
       </Route>
     </Routes>

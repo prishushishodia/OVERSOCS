@@ -1,45 +1,70 @@
-// components/CartDrawer.jsx
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { FiX, FiShoppingBag } from "react-icons/fi";
+import { products, formatPrice } from "../data/products";
 
 export default function CartDrawer({ isOpen, onClose }) {
   useEffect(() => {
-    if (isOpen) document.body.style.overflow = "hidden";
-    else document.body.style.overflow = "";
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
+
+  const suggestions = products.slice(0, 3);
 
   return (
     <>
       {/* Backdrop */}
-    <div
-  onClick={onClose}
-  className={`fixed inset-0 backdrop-blur-sm bg-black/20 z-40 transition-opacity duration-300 ${
-    isOpen ? "opacity-100 visible" : "opacity-0 invisible"
-  }`}
-/>
-
-
+      <div
+        onClick={onClose}
+        className={`fixed inset-0 z-[60] bg-ink/40 backdrop-blur-sm transition-opacity duration-300 ${
+          isOpen ? "visible opacity-100" : "invisible opacity-0"
+        }`}
+      />
 
       {/* Drawer */}
-      <div
-        className={`fixed top-0 right-0 w-full max-w-md bg-[#F5F5DC] h-full z-50 transform transition-transform duration-300 shadow-lg ${
+      <aside
+        className={`fixed right-0 top-0 z-[70] flex h-full w-full max-w-md transform flex-col bg-canvas shadow-2xl transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="p-6 flex justify-between items-center border-b">
-          <h2 className="text-lg font-semibold tracking-widest">CART</h2>
-          <button onClick={onClose} className="text-xl font-bold">×</button>
+        <div className="flex items-center justify-between border-b border-ink/10 p-6">
+          <h2 className="font-grotesk text-sm uppercase tracking-[0.2em] text-ink">Cart (0)</h2>
+          <button onClick={onClose} aria-label="Close cart" className="text-ink hover:text-ember">
+            <FiX className="text-xl" />
+          </button>
         </div>
 
-        {/* Empty Cart UI */}
-        <div className="flex flex-col items-center justify-center h-full space-y-6">
-          <svg className="w-16 h-16 text-black" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-            <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.35 2.7A1 1 0 007 17h12M7 13l-4-8m16 16a1 1 0 100-2 1 1 0 000 2zm-10 0a1 1 0 100-2 1 1 0 000 2z" />
-            <circle cx="16" cy="8" r="1.2" fill="currentColor" />
-          </svg>
-          <p className="text-gray-600">Your cart is currently empty.</p>
-          <button onClick={onClose} className="bg-black text-white px-6 py-2 rounded">Start Shopping</button>
+        {/* Empty state */}
+        <div className="flex flex-1 flex-col items-center justify-center gap-5 px-6 text-center">
+          <span className="flex h-20 w-20 items-center justify-center rounded-full border border-ink/15 text-ink-soft">
+            <FiShoppingBag className="text-2xl" />
+          </span>
+          <p className="text-display text-2xl text-ink">Your cart is empty</p>
+          <p className="max-w-xs font-archivo text-sm text-ink-soft">
+            Looks like you haven't added any pairs yet. Let's fix that.
+          </p>
+          <button onClick={onClose} className="btn btn-solid mt-2">
+            Start shopping
+          </button>
         </div>
-      </div>
+
+        {/* Suggestions */}
+        <div className="border-t border-ink/10 p-6">
+          <p className="mb-4 font-grotesk text-[11px] uppercase tracking-[0.2em] text-ink-soft">You might like</p>
+          <div className="grid grid-cols-3 gap-3">
+            {suggestions.map((p) => (
+              <Link key={p.id} to={`/product/${p.id}`} onClick={onClose} className="group">
+                <div className="aspect-square overflow-hidden bg-canvas-deep">
+                  <img src={p.image} alt={p.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                </div>
+                <p className="mt-2 font-grotesk text-[11px] text-ink-soft">{formatPrice(p.price)}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </aside>
     </>
   );
 }

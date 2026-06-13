@@ -1,21 +1,23 @@
 import HeroSection from "../Components/HeroSection";
-import AboutUs from "../Components/WhyUs";
+import MarqueeBand from "../Components/MarqueeBand";
+import LatestDrop from "../Components/Season";
 import CategorySection from "../Components/Category";
-import New from "../Components/New";
+import EditorialSplit from "../Components/New";
+import Manifesto from "../Components/Compo";
 import ReviewsSection from "../Components/ReviewsSection";
-import Season from "../Components/Season";
-import Compo from "../Components/Compo";
+import AboutLazy from "../Components/AboutLazy";
 
 export default function Home() {
   return (
-    <div className="bg-cream">
-      <HeroSection />         {/* Fixed BG, scrolls properly */}
-      <Season />              {/* Normal */}
-      <CategorySection />     {/* Normal */}
-      <Compo />               
-      <New />                 {/* Normal */}
-      <ReviewsSection />      {/* Normal */}
-      <AboutUs />             {/* Normal */}
+    <div className="bg-canvas">
+      <HeroSection />
+      <MarqueeBand />
+      <LatestDrop />
+      <CategorySection />
+      <EditorialSplit />
+      <Manifesto />
+      <ReviewsSection />
+      <AboutLazy />
     </div>
   );
 }

@@ -1,92 +1,91 @@
 import { useState } from "react";
-import { LogOut, MapPin, ShoppingBag } from "lucide-react";
-import wishlist from "../assets/wishlist.jpg";
-import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { FiLogOut, FiMapPin, FiShoppingBag, FiHeart, FiPackage } from "react-icons/fi";
+import Reveal from "../Components/Reveal";
+import { formatPrice } from "../data/products";
 
 export default function UserPage() {
   const [user] = useState({
-    name: "PRIYANSHU SHISHODIA",
+    name: "Priyanshu Shishodia",
     email: "priyanshu@example.com",
-    avatar: "https://ui-avatars.com/api/?name=Priyanshu+Shishodia&background=000000&color=fff",
     address: "Gurgaon, Haryana, India",
     orders: [
-      { id: 1, product: "Red Bold Socks", date: "2025-06-20", price: "₹499" },
-      { id: 2, product: "Oversized Black Socks", date: "2025-05-10", price: "₹699" },
+      { id: "OS-24819", product: "Ember Ribbed Crew", date: "Jun 10, 2026", price: 349, status: "Shipped" },
+      { id: "OS-24102", product: "Streetlux Black", date: "May 28, 2026", price: 379, status: "Delivered" },
     ],
   });
 
+  const shortcuts = [
+    { label: "Wishlist", icon: FiHeart, to: "/wishlist" },
+    { label: "Track Order", icon: FiPackage, to: "/track-order" },
+    { label: "Returns", icon: FiShoppingBag, to: "/returns" },
+  ];
+
   return (
-    <div className="min-h-screen bg-[#F5F5DC] text-black flex flex-col items-center justify-center px-4 relative overflow-hidden">
+    <main className="min-h-screen bg-canvas pt-28 md:pt-32">
+      <div className="container-x py-10">
+        <Reveal className="mb-12 border-b border-ink/10 pb-8">
+          <p className="mb-2 font-grotesk text-[11px] uppercase tracking-[0.3em] text-ember">Your account</p>
+          <h1 className="text-display text-5xl text-ink md:text-7xl">Hey, {user.name.split(" ")[0]}</h1>
+        </Reveal>
 
-      {/* Background Image */}
-      <img
-        src={wishlist}
-        alt="Oversocs Background"
-        className="absolute top-1/2 left-1/2 w-[150vh] h-auto -translate-x-1/2 -translate-y-1/2 rotate-90 z-0 opacity-30 pointer-events-none"
-      />
-
-      {/* Animated Heading */}
-      <motion.h1
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="text-[clamp(2rem,5vw,4rem)] font-anton font-extrabold uppercase tracking-wide mt-32 mb-10 z-10"
-      >
-        Your Account
-      </motion.h1>
-
-      {/* User Card */}
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="w-full max-w-2xl p-6 flex flex-col md:flex-row items-center gap-6 bg-[#F5F5DC] border border-black rounded-3xl shadow-xl z-10"
-      >
-        <img
-          src={user.avatar}
-          alt="avatar"
-          className="w-28 h-28 rounded-full border-4 border-black"
-        />
-
-        <div className="flex flex-col gap-2 text-center md:text-left">
-          <h2 className="text-2xl font-bold uppercase">{user.name}</h2>
-          <p className="text-black/70">{user.email}</p>
-          <div className="flex items-center gap-2 text-black/70">
-            <MapPin className="w-4 h-4 text-red-500" />
-            <span>{user.address}</span>
-          </div>
-          <button className="mt-4 bg-black text-[#F5F5DC] px-4 py-2 rounded-xl uppercase tracking-wide hover:bg-red-600 hover:text-white transition flex items-center justify-center gap-2">
-            <LogOut className="w-4 h-4" />
-            Logout
-          </button>
-        </div>
-      </motion.div>
-
-      {/* Order History */}
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.4 }}
-        className="w-full max-w-2xl mt-12 z-10"
-      >
-        <h3 className="text-xl font-bold uppercase text-black mb-4">Order History</h3>
-
-        {user.orders.map((order) => (
-          <div
-            key={order.id}
-            className="mb-4 p-4 flex justify-between items-center bg-[#F5F5DC] border border-black rounded-2xl shadow hover:scale-105 hover:shadow-red-500/50 transition-transform group"
-          >
+        <div className="grid gap-8 lg:grid-cols-[1fr_2fr]">
+          {/* Profile card */}
+          <Reveal className="h-fit border border-ink/15 bg-canvas-deep p-8">
             <div className="flex items-center gap-4">
-              <ShoppingBag className="text-red-500 group-hover:scale-110 transition" />
+              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-ink text-2xl text-cream font-display">
+                {user.name.charAt(0)}
+              </span>
               <div>
-                <p className="font-bold text-black">{order.product}</p>
-                <p className="text-black/50 text-sm">{order.date}</p>
+                <h2 className="font-grotesk text-lg font-medium uppercase text-ink">{user.name}</h2>
+                <p className="font-grotesk text-sm text-ink-soft">{user.email}</p>
               </div>
             </div>
-            <span className="font-bold text-red-500">{order.price}</span>
-          </div>
-        ))}
-      </motion.div>
-    </div>
+            <div className="mt-6 flex items-center gap-2 font-archivo text-sm text-ink-soft">
+              <FiMapPin className="text-ember" /> {user.address}
+            </div>
+
+            <div className="mt-8 grid grid-cols-3 gap-2">
+              {shortcuts.map((s) => (
+                <Link key={s.label} to={s.to} className="flex flex-col items-center gap-2 border border-ink/15 py-4 text-center transition-colors hover:border-ink">
+                  <s.icon className="text-lg text-ink" />
+                  <span className="font-grotesk text-[10px] uppercase tracking-wide text-ink-soft">{s.label}</span>
+                </Link>
+              ))}
+            </div>
+
+            <button className="btn btn-outline mt-8 w-full">
+              <FiLogOut /> Log out
+            </button>
+          </Reveal>
+
+          {/* Orders */}
+          <Reveal delay={0.1}>
+            <h3 className="text-display mb-6 text-3xl text-ink">Order history</h3>
+            <div className="space-y-4">
+              {user.orders.map((order) => (
+                <div key={order.id} className="flex flex-wrap items-center justify-between gap-4 border border-ink/15 bg-canvas-deep p-6">
+                  <div className="flex items-center gap-4">
+                    <span className="flex h-12 w-12 items-center justify-center bg-ink text-cream">
+                      <FiShoppingBag />
+                    </span>
+                    <div>
+                      <p className="font-grotesk text-sm font-medium uppercase text-ink">{order.product}</p>
+                      <p className="font-grotesk text-xs text-ink-soft">{order.id} · {order.date}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <span className={`px-3 py-1 font-grotesk text-[10px] uppercase tracking-wide ${order.status === "Delivered" ? "bg-ink text-cream" : "bg-ember text-cream"}`}>
+                      {order.status}
+                    </span>
+                    <span className="font-grotesk text-sm text-ink">{formatPrice(order.price)}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </main>
   );
 }

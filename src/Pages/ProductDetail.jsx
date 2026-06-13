@@ -1,172 +1,168 @@
-import { useParams, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
+import { FiHeart, FiMinus, FiPlus, FiStar, FiChevronDown } from "react-icons/fi";
+import { products, getProductById, formatPrice } from "../data/products";
+import ProductCard from "../Components/ProductCard";
 
+const SIZES = ["S", "M", "L", "XL"];
+const accordion = [
+  { title: "Product Details", body: "Combed cotton blend with a reinforced heel and hand-linked toe seam. Knitted in a 200-needle count for a smooth, dense finish that holds its shape wash after wash." },
+  { title: "Shipping", body: "Free shipping on orders over ₹999. Dispatched within 24 hours; delivered in 2–5 business days across India." },
+  { title: "Returns & Exchange", body: "Not in love? Return unworn pairs within 7 days for a full refund or a free size swap." },
+];
 
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const product = getProductById(id) ?? products[0];
 
-  // Mock Product Data
-  const product = {
-    id,
-    name: "Classic Red Socks",
-    price: "₹299",
-    description:
-      "Step up your sock game with our Classic Red Socks. Bold, comfortable, made with premium cotton blend for everyday wear.",
-    category: "Ankle Length",
-    images: ["/assets/socks1.png", "/assets/socks2.png", "/assets/socks3.png"],
-    colors: ["#FF0000", "#000000", "#FFFFFF"],
-    sizes: ["S", "M", "L", "XL"],
-  };
-
-  const [selectedImage, setSelectedImage] = useState(product.images[0]);
   const [selectedColor, setSelectedColor] = useState(product.colors[0]);
-  const [selectedSize, setSelectedSize] = useState(null);
-  const [expanded, setExpanded] = useState(null);
+  const [selectedSize, setSelectedSize] = useState("M");
+  const [qty, setQty] = useState(1);
+  const [openAcc, setOpenAcc] = useState(0);
+
+  const related = useMemo(
+    () => products.filter((p) => p.id !== product.id).slice(0, 4),
+    [product.id]
+  );
 
   return (
-    <main
-      className="min-h-screen bg-[#F5F5DC] text-black relative flex flex-col md:flex-row px-4 py-20 md:py-28 gap-8 overflow-hidden"
-    
-    >
-      {/* Left Image Gallery */}
-      <aside className="w-full md:w-1/2 flex flex-col items-center sticky top-28 z-10">
-        <motion.img
-          key={selectedImage}
-          src={selectedImage}
-          alt="Product View"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="w-[80%] h-auto object-contain border border-black mb-4"
-        />
+    <main className="min-h-screen bg-canvas pt-28 md:pt-32">
+      <div className="container-x">
+        {/* Breadcrumb */}
+        <nav className="mb-8 font-grotesk text-xs uppercase tracking-[0.18em] text-ink-soft">
+          <Link to="/" className="hover:text-ember">Home</Link>
+          <span className="mx-2">/</span>
+          <Link to="/shop" className="hover:text-ember">Shop</Link>
+          <span className="mx-2">/</span>
+          <span className="text-ink">{product.name}</span>
+        </nav>
 
-        <div className="flex gap-3">
-          {product.images.map((img, i) => (
-            <img
-              key={i}
-              src={img}
-              alt="Thumbnail"
-              onClick={() => setSelectedImage(img)}
-              className={`w-20 h-20 object-contain border border-black cursor-pointer hover:scale-105 transition ${
-                selectedImage === img ? "border-2 border-red-500" : ""
-              }`}
-            />
-          ))}
-        </div>
-      </aside>
-
-      {/* Right Product Info */}
-      <section className="w-full md:w-1/2 space-y-6 max-w-xl mx-auto">
-        <motion.h1
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6 }}
-          className="text-4xl md:text-5xl font-anton uppercase"
-        >
-          {product.name}
-        </motion.h1>
-
-        <p className="text-black/70">{product.category}</p>
-        <p className="text-2xl font-bold text-red-500">{product.price}</p>
-
-        {/* Color Options */}
-        <div className="flex items-center gap-3">
-          <span className="font-semibold">Color:</span>
-          {product.colors.map((color) => (
-            <button
-              key={color}
-              style={{ backgroundColor: color }}
-              className={`w-8 h-8 border border-black hover:scale-110 transition ${
-                selectedColor === color ? "ring-2 ring-red-500" : ""
-              }`}
-              onClick={() => setSelectedColor(color)}
-            />
-          ))}
-        </div>
-
-        {/* Size Options */}
-        <div className="flex gap-3">
-          {product.sizes.map((size) => (
-            <button
-              key={size}
-              onClick={() => setSelectedSize(size)}
-              className={`px-4 py-2 border border-black uppercase font-bold ${
-                selectedSize === size ? "bg-black text-[#F5F5DC]" : "bg-white text-black"
-              } hover:bg-black hover:text-[#F5F5DC] transition`}
+        <div className="grid gap-12 lg:grid-cols-2">
+          {/* Image */}
+          <div className="lg:sticky lg:top-32 lg:self-start">
+            <motion.div
+              key={product.image}
+              initial={{ opacity: 0, scale: 1.02 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="relative aspect-[4/5] overflow-hidden bg-canvas-deep"
             >
-              {size}
-            </button>
-          ))}
-        </div>
+              <span className="absolute left-4 top-4 z-10 bg-ink px-3 py-1 font-grotesk text-[10px] uppercase tracking-[0.15em] text-cream">
+                {product.tag}
+              </span>
+              <img src={product.image} alt={product.name} className="h-full w-full object-cover" />
+            </motion.div>
+          </div>
 
-        {/* Add to Cart & Wishlist */}
-        <div className="flex gap-4">
-          <button className="px-6 py-3 bg-black text-[#F5F5DC] uppercase font-bold hover:bg-red-500 hover:text-white transition">
-            Add to Cart
-          </button>
-          <button
-            className="px-6 py-3 border border-black text-black uppercase font-bold hover:bg-black hover:text-[#F5F5DC] transition"
-            onClick={() => navigate("/wishlist")}
-          >
-            Add to Wishlist
-          </button>
-        </div>
+          {/* Info */}
+          <div className="max-w-xl">
+            <div className="mb-4 flex items-center gap-2 text-ember">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <FiStar key={i} className="fill-ember text-sm" />
+              ))}
+              <span className="ml-1 font-grotesk text-xs text-ink-soft">(128 reviews)</span>
+            </div>
 
-        {/* Description */}
-        <p className="text-black/80">{product.description}</p>
+            <h1 className="text-display text-5xl text-ink md:text-6xl">{product.name}</h1>
+            <p className="mt-4 font-grotesk text-2xl text-ink">{formatPrice(product.price)}</p>
+            <p className="mt-6 font-archivo text-base leading-relaxed text-ink-soft">{product.blurb}</p>
 
-        {/* Accordion Details */}
-        <div className="border-t border-black pt-4 space-y-3">
-          {["Product Details", "Return & Exchange", "Shipping Info"].map((title, i) => (
-            <div key={i}>
+            {/* Colour */}
+            <div className="mt-8">
+              <p className="mb-3 font-grotesk text-xs uppercase tracking-[0.2em] text-ink-soft">Colourway</p>
+              <div className="flex gap-3">
+                {product.colors.map((color) => (
+                  <button
+                    key={color}
+                    onClick={() => setSelectedColor(color)}
+                    style={{ backgroundColor: color }}
+                    aria-label={`Colour ${color}`}
+                    className={`h-9 w-9 rounded-full border transition-all ${
+                      selectedColor === color
+                        ? "ring-2 ring-ember ring-offset-2 ring-offset-canvas border-transparent"
+                        : "border-ink/20 hover:scale-110"
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Size */}
+            <div className="mt-8">
+              <div className="mb-3 flex items-center justify-between">
+                <p className="font-grotesk text-xs uppercase tracking-[0.2em] text-ink-soft">Size</p>
+                <button className="font-grotesk text-xs uppercase tracking-wide text-ember hover:underline">Size guide</button>
+              </div>
+              <div className="flex gap-3">
+                {SIZES.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => setSelectedSize(size)}
+                    className={`h-12 w-12 border font-grotesk text-sm uppercase transition-colors ${
+                      selectedSize === size
+                        ? "border-ink bg-ink text-cream"
+                        : "border-ink/20 text-ink hover:border-ink"
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Qty + actions */}
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <div className="flex items-center border border-ink/20">
+                <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="px-4 py-3 text-ink hover:text-ember" aria-label="Decrease">
+                  <FiMinus />
+                </button>
+                <span className="w-10 text-center font-grotesk text-sm">{qty}</span>
+                <button onClick={() => setQty((q) => q + 1)} className="px-4 py-3 text-ink hover:text-ember" aria-label="Increase">
+                  <FiPlus />
+                </button>
+              </div>
+              <button className="btn btn-solid flex-1">Add to cart · {formatPrice(product.price * qty)}</button>
               <button
-                onClick={() => setExpanded(expanded === i ? null : i)}
-                className="w-full flex justify-between items-center text-left font-semibold uppercase py-2"
+                onClick={() => navigate("/wishlist")}
+                aria-label="Add to wishlist"
+                className="flex h-[52px] w-[52px] items-center justify-center border border-ink/20 text-ink transition-colors hover:border-ember hover:text-ember"
               >
-                {title}
-                <span>{expanded === i ? "▲" : "▼"}</span>
+                <FiHeart />
               </button>
-              {expanded === i && (
-                <p className="text-black/70 text-sm pl-2">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quality guaranteed.
-                </p>
-              )}
             </div>
-          ))}
+
+            {/* Accordions */}
+            <div className="mt-10 border-t border-ink/15">
+              {accordion.map((item, i) => (
+                <div key={item.title} className="border-b border-ink/15">
+                  <button
+                    onClick={() => setOpenAcc(openAcc === i ? -1 : i)}
+                    className="flex w-full items-center justify-between py-5 font-grotesk text-sm uppercase tracking-wide text-ink"
+                  >
+                    {item.title}
+                    <FiChevronDown className={`transition-transform ${openAcc === i ? "rotate-180" : ""}`} />
+                  </button>
+                  {openAcc === i && (
+                    <p className="pb-5 font-archivo text-sm leading-relaxed text-ink-soft">{item.body}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        {/* Reviews Section */}
-        <div className="mt-6 border-t border-black pt-4 space-y-4">
-          <h3 className="text-lg font-bold">Reviews (3)</h3>
-          {[1, 2, 3].map((r) => (
-            <div key={r} className="border border-black p-3 space-y-1">
-              <div className="flex items-center gap-2">
-                {"★".repeat(4)} <span className="text-sm">(4/5)</span>
-              </div>
-              <p className="text-black/80 text-sm">Great quality socks. Comfortable and stylish!</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Suggested Products */}
-        <div className="mt-8">
-          <h4 className="text-xl font-bold mb-3 uppercase">You may also like</h4>
-          <div className="grid grid-cols-2 gap-4">
-            {[1, 2].map((s) => (
-              <div
-                key={s}
-                onClick={() => navigate(`/product/${s}`)}
-                className="border border-black p-3 bg-[#F5F5DC] hover:shadow-xl cursor-pointer transition"
-              >
-                <img src={`/assets/socks${s}.png`} alt="Suggest" className="h-32 w-full object-contain mb-2" />
-                <p className="font-bold uppercase text-sm">Sock Style {s}</p>
-              </div>
+        {/* Related */}
+        <div className="border-t border-ink/10 py-20 md:py-28">
+          <h2 className="text-display mb-10 text-4xl text-ink md:text-5xl">You may also like</h2>
+          <div className="grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-4">
+            {related.map((p, i) => (
+              <ProductCard key={p.id} product={p} index={i} />
             ))}
           </div>
         </div>
-      </section>
+      </div>
     </main>
   );
 }
